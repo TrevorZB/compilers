@@ -79,33 +79,33 @@ return new Symbol(sym.EOF);
 %line
 
 %%
-((//)|(##)).*{NEWLINE}
+((//)|(##)).*$
 { // comment
   CharNum.num = 1;
 }
 
-"\{"  
+"{"  
 {
   Symbol s = new Symbol(sym.LCURLY, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
   return s;
 }
 
-"\}"  
+"}"  
 {
   Symbol s = new Symbol(sym.RCURLY, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
   return s;
 }
 
-"\("  
+"("  
 {
   Symbol s = new Symbol(sym.LPAREN, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
   return s;
 }
 
-"\)"  
+")"  
 {
   Symbol s = new Symbol(sym.RPAREN, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
@@ -147,7 +147,7 @@ return new Symbol(sym.EOF);
   return s;
 }
 
-"\+\+"  
+"++"  
 {
   Symbol s = new Symbol(sym.PLUSPLUS, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
@@ -161,7 +161,7 @@ return new Symbol(sym.EOF);
   return s;
 }
 
-"\+"  
+"+"  
 {
   Symbol s = new Symbol(sym.PLUS, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
@@ -175,7 +175,7 @@ return new Symbol(sym.EOF);
   return s;
 }
 
-"\*"
+"*"
 {
   Symbol s = new Symbol(sym.TIMES, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
@@ -203,7 +203,7 @@ return new Symbol(sym.EOF);
   return s;
 }
 
-"\|\|"
+"||"
 {
   Symbol s = new Symbol(sym.OR, new TokenVal(yyline+1, CharNum.num));
   CharNum.num += yytext().length();
@@ -372,8 +372,8 @@ return new Symbol(sym.EOF);
   return s;
 }
 
-{QUOTE}{VALID_SEQ}*{SLASH}{INVALID_ESCAPE}(({SLASH}{QUOTE})|{NOT_NEWLINE_QUOTE})*{NEWLINE}
-{ // bad and unterminated string literal
+{QUOTE}{VALID_SEQ}*{SLASH}{INVALID_ESCAPE}(({SLASH}{QUOTE})|{NOT_NEWLINE_QUOTE})*$
+{ // bad escape string literal and unterminated
   ErrMsg.fatal(yyline+1, CharNum.num, "unterminated string literal with bad escaped character ignored");
   CharNum.num = 1;
 }
@@ -383,7 +383,7 @@ return new Symbol(sym.EOF);
   ErrMsg.fatal(yyline+1, CharNum.num, "string literal with bad escaped character ignored");
 }
 
-{QUOTE}{VALID_SEQ}*{NEWLINE}
+{QUOTE}{VALID_SEQ}*$
 { // unterminated string literal
   ErrMsg.fatal(yyline+1, CharNum.num, "unterminated string literal ignored");
   CharNum.num = 1;
