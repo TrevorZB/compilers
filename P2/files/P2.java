@@ -198,9 +198,9 @@ public class P2 {
                 case sym.INTLITERAL:  
                     System.err.println(((IntLitTokenVal)token.value).intVal);
                 break;
-                case sym.STRINGLITERAL: 
-                    System.err.println(((StrLitTokenVal)token.value).strVal);
-                break; 
+                case sym.ID:
+                    System.err.println(((IdTokenVal)token.value).idVal);
+                break;
             }
             token = scanner.next_token();
         }
