@@ -16,6 +16,7 @@ public class P2 {
         CharNum.num = 1;
     
         // ADD CALLS TO OTHER TEST METHODS HERE
+
         // testing of various string literals
         testValidStringLiterals(); 
         CharNum.num = 1;
@@ -67,7 +68,7 @@ public class P2 {
         Symbol token = scanner.next_token();
         while (token.sym != sym.EOF) {
             switch (token.sym) {
-                case sym.ID:
+                case sym.ID:  // only testing Id's for this test
                     outFile.println(((IdTokenVal)token.value).idVal);
                 break;
                 default:
@@ -198,7 +199,7 @@ public class P2 {
                 case sym.INTLITERAL:  
                     System.err.println(((IntLitTokenVal)token.value).intVal);
                 break;
-                case sym.ID:
+                case sym.ID:  // also tests an incorrect id
                     System.err.println(((IdTokenVal)token.value).idVal);
                 break;
             }
@@ -237,7 +238,7 @@ public class P2 {
         Symbol token = scanner.next_token();
         while (token.sym != sym.EOF) {
             switch (token.sym) {
-                case sym.STRINGLITERAL: 
+                case sym.STRINGLITERAL: // only testing valid string literals
                     outFile.println(((StrLitTokenVal)token.value).strVal);
                 break; 
                 default:
