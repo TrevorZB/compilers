@@ -1,0 +1,7 @@
+"unterminated string
+"bad escape character \a "
+"multiple \x bad \r escape characters"
+"bad and \x good \n escape characters"
+"bad escape character \x and unterminated
+"new line directly after backslash \
+"string unterminated due to end of file

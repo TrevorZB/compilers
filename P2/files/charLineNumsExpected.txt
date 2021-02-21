@@ -1,0 +1,21 @@
+Linenum: 1
+Charnum: 1
+
+Linenum: 1
+Charnum: 13
+
+Linenum: 4
+Charnum: 5
+
+Linenum: 6
+Charnum: 5
+
+Linenum: 8
+Charnum: 1
+
+Linenum: 8
+Charnum: 8
+
+Linenum: 10
+Charnum: 2
+

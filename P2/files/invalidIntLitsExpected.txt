@@ -1,0 +1,4 @@
+1:1 ***ERROR*** integer literal too large; using max value
+2147483647
+123
+1

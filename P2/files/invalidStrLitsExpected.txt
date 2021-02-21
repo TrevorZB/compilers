@@ -1,0 +1,7 @@
+1:1 ***ERROR*** unterminated string literal ignored
+2:1 ***ERROR*** string literal with bad escaped character ignored
+3:1 ***ERROR*** string literal with bad escaped character ignored
+4:1 ***ERROR*** string literal with bad escaped character ignored
+5:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+6:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+7:1 ***ERROR*** unterminated string literal ignored

@@ -36,8 +36,13 @@ ErrMsg.class: ErrMsg.java
 # to expected results
 ###
 test:
-	java -cp $(CP) P2 
+	java -cp $(CP) P2
 	diff allTokens.in allTokens.out
+	diff strLits.in strLits.out
+	diff invalidStrLits.out invalidStrLitsExpected.txt
+	diff charLineNums.out charLineNumsExpected.txt
+	diff testIDComments.out testIDCommentsExpected.txt
+	diff invalidIntLits.out invalidIntLitsExpected.txt
 
 ###
 # clean up
@@ -48,3 +53,8 @@ clean:
 
 cleantest:
 	rm -f allTokens.out
+	rm -f strLits.out
+	rm -f invalidStrLits.out
+	rm -f charLineNums.out
+	rm -f testIDComments.out
+	rm -f invalidIntLits.out

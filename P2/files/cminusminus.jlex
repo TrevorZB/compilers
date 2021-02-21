@@ -126,6 +126,13 @@ return new Symbol(sym.EOF);
   return s;
 }
 
+"."
+{
+  Symbol s = new Symbol(sym.DOT, new TokenVal(yyline+1, CharNum.num));
+  CharNum.num += yytext().length();
+  return s;
+}
+
 "\."  
 {
   Symbol s = new Symbol(sym.LPAREN, new TokenVal(yyline+1, CharNum.num));
@@ -370,6 +377,12 @@ return new Symbol(sym.EOF);
   String val = yytext();
   Symbol s = new Symbol(sym.STRINGLITERAL, new StrLitTokenVal(yyline+1, CharNum.num, val));
   return s;
+}
+
+{QUOTE}{VALID_SEQ}*{SLASH}{NEWLINE}
+{ // bad escape string literal and unterminated, special new line after slash case
+  ErrMsg.fatal(yyline+1, CharNum.num, "unterminated string literal with bad escaped character ignored");
+  CharNum.num = 1;
 }
 
 {QUOTE}{VALID_SEQ}*{SLASH}{INVALID_ESCAPE}(({SLASH}{QUOTE})|{NOT_NEWLINE_QUOTE})*$
