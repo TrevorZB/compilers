@@ -1,2 +1,3 @@
-struct sadboy { int a; int b;} ;
-struct sadboy s;
+int main() {
+    
+}

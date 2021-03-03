@@ -84,6 +84,20 @@ non terminal IdNode           id;
 non terminal StructDeclNode   structDecl;
 non terminal FnDeclNode       fnDecl;
 non terminal LinkedList       formalsList;
+non terminal LinkedList       formals;
+non terminal FnBodyNode       fnBody;
+
+non terminal FormalDeclNode   formalDecl;
+non terminal LinkedList       varDeclList;
+non terminal LinkedList       stmtList;
+non terminal AssignStmtNode   stmt;
+non terminal AssignNode       assignExp;
+
+non terminal ExpNode          loc;
+non terminal ExpNode          exp;
+non terminal ExpNode          term;
+
+
 
 
 /* Precedences
@@ -132,6 +146,8 @@ varDecl         ::= type:t id:i SEMICOLON
                 ;
 ///////////
 fnDecl          ::= type:t id:i formals:f fnBody:fn
+                {: RESULT = new FnDeclNode(t, i, new FormalsListNode(f), fn); :}
+                ;
 
 formals         ::= LPAREN RPAREN
                 {: RESULT = new LinkedList<FormalDeclNode>(); :}
@@ -153,6 +169,14 @@ formalDecl      ::= type:t id:i        // note: no struct parameters
                 ;
 
 fnBody          ::= LCURLY varDeclList:vl stmtList:sl RCURLY
+                {: RESULT = new FnBodyNode(new DeclListNode(vl), new StmtListNode(sl)); :}
+                ;
+
+varDeclList     ::= varDeclList:vl varDecl:v
+                {: vl.addLast(v);
+                   RESULT = vl; :}
+                | /* epsilon */
+                {: RESULT = new LinkedList<VarDeclNode>(); :}
                 ;
 
 stmtList        ::= stmtList:sl stmt:s
@@ -171,7 +195,7 @@ assignExp       ::= loc:l ASSIGN exp:e
                 ;
 
 loc             ::= id:i
-                {: RESULT = new IdNode(i.linenum, i.charnum, i.idVal); :}
+                {: RESULT = i; :}
                 ;
 
 exp             ::= term:t
