@@ -90,12 +90,14 @@ non terminal FnBodyNode       fnBody;
 non terminal FormalDeclNode   formalDecl;
 non terminal LinkedList       varDeclList;
 non terminal LinkedList       stmtList;
-non terminal AssignStmtNode   stmt;
+non terminal StmtNode         stmt;
 non terminal AssignNode       assignExp;
 
 non terminal ExpNode          loc;
 non terminal ExpNode          exp;
 non terminal ExpNode          term;
+non terminal LinkedList       actualList;
+non terminal CallExpNode      fncall;
 
 
 
@@ -144,7 +146,7 @@ varDecl         ::= type:t id:i SEMICOLON
                 | STRUCT id:s id:v SEMICOLON
                 {: RESULT = new VarDeclNode(new StructNode(s), v, 0); :}
                 ;
-///////////
+
 fnDecl          ::= type:t id:i formals:f fnBody:fn
                 {: RESULT = new FnDeclNode(t, i, new FormalsListNode(f), fn); :}
                 ;
@@ -157,10 +159,10 @@ formals         ::= LPAREN RPAREN
 
 formalsList     ::= formalDecl:f
                 {:  LinkedList<FormalDeclNode> l = new LinkedList<FormalDeclNode>();
-                    l.addLast(f);
+                    l.addFirst(f);
                     RESULT = l; :}
                 | formalDecl:fd COMMA formalsList:fl
-                {:  fl.addLast(fd);
+                {:  fl.addFirst(fd);
                     RESULT = fl; :}
                 ;
 
@@ -188,6 +190,47 @@ stmtList        ::= stmtList:sl stmt:s
 
 stmt            ::= assignExp:a SEMICOLON
                 {: RESULT = new AssignStmtNode(a); :}
+                | loc:l PLUSPLUS SEMICOLON
+                {: RESULT = new PostIncStmtNode(l); :}
+                | loc:l MINUSMINUS SEMICOLON
+                {: RESULT = new PostDecStmtNode(l); :}
+                | CIN READ loc:l SEMICOLON
+                {: RESULT = new ReadStmtNode(l); :}
+                | COUT WRITE exp:e SEMICOLON
+                {: RESULT = new WriteStmtNode(e); :}
+                | IF LPAREN exp:e RPAREN LCURLY varDeclList:v stmtList:s RCURLY
+                {: RESULT = new IfStmtNode(e, new DeclListNode(v), new StmtListNode(s)); :}
+                | IF LPAREN exp:e RPAREN LCURLY varDeclList:v1 stmtList:s1 RCURLY ELSE LCURLY varDeclList:v2 stmtList:s2 RCURLY
+                {: RESULT = new IfElseStmtNode(e,
+                    new DeclListNode(v1),
+                    new StmtListNode(s1),
+                    new DeclListNode(v2),
+                    new StmtListNode(s2)); :}
+                | WHILE LPAREN exp:e RPAREN LCURLY varDeclList:v stmtList:s RCURLY
+                {: RESULT = new WhileStmtNode(e, new DeclListNode(v), new StmtListNode(s)); :}
+                | REPEAT LPAREN exp:e RPAREN LCURLY varDeclList:v stmtList:s RCURLY
+                {: RESULT = new RepeatStmtNode(e, new DeclListNode(v), new StmtListNode(s)); :}
+                | RETURN exp:e SEMICOLON
+                {: RESULT = new ReturnStmtNode(e); :}
+                | RETURN SEMICOLON   // GOTTA FIX THIS ONE
+                {: RESULT = new ReturnStmtNode(new StringLitNode(0, 0, "")); :}
+                | fncall:f SEMICOLON
+                {: RESULT = new CallStmtNode(f); :}
+                ;
+
+fncall          ::= id:i LPAREN RPAREN   // fn call with no args
+                {: RESULT = new CallExpNode(i); :}
+                | id:i LPAREN actualList:l RPAREN  // with args
+                {: RESULT = new CallExpNode(i, new ExpListNode(l)); :}
+                ;
+
+actualList      ::= exp:e
+                {: LinkedList<ExpNode> l = new LinkedList<ExpNode>();
+                   l.addLast(e);
+                   RESULT = l; :}
+                | actualList:l COMMA exp:e
+                {: l.addLast(e);
+                   RESULT = l; :}
                 ;
 
 assignExp       ::= loc:l ASSIGN exp:e
@@ -206,7 +249,6 @@ term            ::= loc:l
                 {: RESULT = l; :}
                 ;
 
-///////////
 structDecl      ::= STRUCT id:i LCURLY declList:structBody RCURLY SEMICOLON
                 {: RESULT = new StructDeclNode(i, new DeclListNode(structBody)); :}
                 ;

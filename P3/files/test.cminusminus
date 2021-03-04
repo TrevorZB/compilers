@@ -1,5 +1,32 @@
-int main() {
+int main(int c, int d) {
     int a;
     int b;
+    if (a) {
+        int a;
+        int b;
+        a = b;
+        return a;
+    }
+    else {
+        int a;
+        int b;
+        a = b;
+        return a;
+    }
+    while (a) {
+        int b;
+        int c;
+        b = a;
+        return b;
+    }
+    repeat (a) {
+        int a;
+        int b;
+        a = b;
+        return b;
+    }
+    func();
+    func(a, b);
     a = b;
+    return a;
 }
