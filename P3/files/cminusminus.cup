@@ -29,15 +29,15 @@ public void syntax_error(Symbol currToken) {
 terminal                INT;
 terminal                BOOL;
 terminal                VOID;
-terminal                TRUE;
-terminal                FALSE;
+terminal TokenVal       TRUE;
+terminal TokenVal       FALSE;
 terminal                STRUCT;
 terminal                CIN;
 terminal                COUT;
 terminal                IF;
 terminal                ELSE;
 terminal                WHILE;
-terminal		REPEAT;
+terminal		        REPEAT;
 terminal                RETURN;
 terminal IdTokenVal     ID;
 terminal IntLitTokenVal INTLITERAL;
@@ -98,6 +98,7 @@ non terminal ExpNode          exp;
 non terminal ExpNode          term;
 non terminal LinkedList       actualList;
 non terminal CallExpNode      fncall;
+non terminal LinkedList       structBody;
 
 
 
@@ -107,6 +108,15 @@ non terminal CallExpNode      fncall;
  * NOTE: Add precedence and associativity declarations here.
  *
  */
+
+precedence left     DOT;
+precedence right    ASSIGN;
+precedence left     OR;
+precedence left     AND;
+precedence nonassoc LESS, GREATER, LESSEQ, GREATEREQ, EQUALS, NOTEQUALS;
+precedence left     PLUS;
+precedence left     TIMES, DIVIDE;
+precedence nonassoc MINUS, NOT;
 
 
 start with program;
@@ -239,6 +249,8 @@ assignExp       ::= loc:l ASSIGN exp:e
 
 loc             ::= id:i
                 {: RESULT = i; :}
+                | loc:l DOT id:i
+                {: RESULT = new DotAccessExpNode(l, i); :}
                 ;
 
 exp             ::= assignExp:e
@@ -277,10 +289,31 @@ exp             ::= assignExp:e
 
 term            ::= loc:l
                 {: RESULT = l; :}
+                | INTLITERAL:i
+                {: RESULT = new IntLitNode(i.linenum, i.charnum, i.intVal); :}
+                | STRINGLITERAL:s
+                {: RESULT = new StringLitNode(s.linenum, s.charnum, s.strVal); :}
+                | TRUE:t
+                {: RESULT = new TrueNode(t.linenum, t.charnum); :}
+                | FALSE:f
+                {: RESULT = new FalseNode(f.linenum, f.charnum); :}
+                | LPAREN exp:e RPAREN
+                {: RESULT = e; :}
+                | fncall:f
+                {: RESULT = f; :}
                 ;
 
-structDecl      ::= STRUCT id:i LCURLY declList:structBody RCURLY SEMICOLON
-                {: RESULT = new StructDeclNode(i, new DeclListNode(structBody)); :}
+structDecl      ::= STRUCT id:i LCURLY structBody:s RCURLY SEMICOLON
+                {: RESULT = new StructDeclNode(i, new DeclListNode(s)); :}
+                ;
+
+structBody      ::= structBody:s varDecl:v
+                {: s.addLast(v);
+                   RESULT = s; :}
+                | varDecl:v
+                {: LinkedList<VarDeclNode> l = new LinkedList<VarDeclNode>();
+                   l.addFirst(v);
+                   RESULT = l; :}
                 ;
 
 type            ::= INT

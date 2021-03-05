@@ -1,3 +1,6 @@
+
+struct s { int a; int b; };
+
 int main(int c, int d) {
     int a;
     int b;
@@ -6,6 +9,15 @@ int main(int c, int d) {
         int b;
         a = b;
         return a;
+        if (b) {
+            a = "trevor";
+            a = 17;
+            a = true;
+            a = false;
+            a = (1 + 1);
+            a = main(7, "abc");
+            a.s = 7;
+        }
     }
     else {
         int a;
@@ -29,4 +41,22 @@ int main(int c, int d) {
     func(a, b);
     a = b;
     return a;
+    i++;
+    i--;
+    cin >> i;
+    cout << i;
+    i = i + i;
+    i = i - i;
+    i = i * i;
+    i = i / i;
+    i = !i;
+    i = i && i;
+    i = i || i;
+    i = i == i;
+    i = i != i;
+    i = i < i;
+    i = i > i;
+    i = i <= i;
+    i = i >= i;
+    i = -i;
 }

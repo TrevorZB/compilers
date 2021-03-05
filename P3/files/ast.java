@@ -678,6 +678,8 @@ class FalseNode extends ExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
+        addIndentation(p, indent);
+        p.print("false");
     }
 
     // two children
@@ -709,6 +711,10 @@ class DotAccessExpNode extends ExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
+        addIndentation(p, indent);
+        myLoc.unparse(p, 0);
+        p.print(".");
+        myId.unparse(p, 0);
     }
 
     // two children
