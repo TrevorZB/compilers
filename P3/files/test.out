@@ -1,66 +1,93 @@
 struct s {
     int a;
     int b;
+    int c;
 };
+
+void func() {
+    int a;
+    return 2 + 2;
+}
+
+void empty_func() {
+}
 
 int main(int c, int d) {
     int a;
     int b;
-    if (a) {
+    bool c;
+    bool d;
+    void e;
+    struct s a;
+    a.a = 10;
+    a.b = 15;
+    a.c = a.a + a.b;
+    a = "hello";
+    b = 6;
+    b = a;
+    z = 4 * 2 + 3 / 1;
+    c = true;
+    d = false;
+    c = a == b;
+    c = a != b;
+    c = a < b;
+    c = a > b;
+    c = a <= b;
+    c = a >= b;
+    c = c && d;
+    c = c || d;
+    c = !c;
+    i++;
+    i--;
+    cin >> i;
+    cout << i;
+    cout << "hello";
+    cout << i + 7;
+    i = i + i;
+    i = i - i;
+    i = i * i;
+    i = i / i;
+    a = a + b * c;
+    a = a + b * c;
+    return a;
+    return a + b;
+    return 7;
+    return true;
+    return "hello";
+    return;
+    if (a == b && b == c) {
         int a;
         int b;
         a = b;
-        return a;
         if (b) {
-            a = "trevor";
+            int a;
+            a = 5;
             a = 17;
-            a = true;
-            a = false;
-            a = 1 + 1;
-            a = main(7, "abc");
-            a.s = 7;
         }
     }
     else {
         int a;
         int b;
         a = b;
-        return a;
     }
-    while (a) {
+    while (a == 1) {
         int b;
         int c;
         b = a;
-        return b;
+        while (a && b) {
+            int z;
+            bool y;
+            z = 1;
+            y = true;
+        }
     }
-    repeat (a) {
+    repeat (a != 9) {
         int a;
         int b;
         a = b;
-        return b;
     }
     func();
-    func(a, b);
-    a = b;
-    return a;
-    i++;
-    i--;
-    cin >> i;
-    cout << i;
-    i = i + i;
-    i = i - i;
-    i = i * i;
-    i = i / i;
-    i = !i;
-    i = i && i;
-    i = i || i;
-    i = i == i;
-    i = i != i;
-    i = i < i;
-    i = i > i;
-    i = i <= i;
-    i = i >= i;
-    i = -i;
-
+    func(a, b, s.a);
+    func(5, 7, "hello", true);
 }
 

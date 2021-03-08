@@ -292,7 +292,6 @@ class FnDeclNode extends DeclNode {
         myFormalsList.unparse(p, 0);
         p.println(") {");
         myBody.unparse(p, indent + 4);
-        p.println("");
         p.println("}");
     }
 
@@ -544,7 +543,7 @@ class WhileStmtNode extends StmtNode {
     public void unparse(PrintWriter p, int indent) {
         addIndentation(p, indent);
         p.print("while (");
-        myExp.unparse(p, indent);
+        myExp.unparse(p, 0);
         p.println(") {");
         myDeclList.unparse(p, indent + 4);
         myStmtList.unparse(p, indent + 4);
@@ -568,7 +567,7 @@ class RepeatStmtNode extends StmtNode {
     public void unparse(PrintWriter p, int indent) {
         addIndentation(p, indent);
         p.print("repeat (");
-        myExp.unparse(p, indent);
+        myExp.unparse(p, 0);
         p.println(") {");
         myDeclList.unparse(p, indent + 4);
         myStmtList.unparse(p, indent + 4);
@@ -604,8 +603,12 @@ class ReturnStmtNode extends StmtNode {
 
     public void unparse(PrintWriter p, int indent) {
         addIndentation(p, indent);
-        p.print("return ");
-        myExp.unparse(p, indent);
+        p.print("return");
+        if (myExp != null)
+        {
+            p.print(" ");
+            myExp.unparse(p, 0);
+        }
         p.print(";");
     }
 
@@ -754,7 +757,10 @@ class CallExpNode extends ExpNode {
     public void unparse(PrintWriter p, int indent) {
         myId.unparse(p, indent);
         p.print("(");
-        myExpList.unparse(p, indent);
+        if (myExpList != null)
+        {
+            myExpList.unparse(p, indent);
+        }
         p.print(")");
     }
 

@@ -222,14 +222,14 @@ stmt            ::= assignExp:a SEMICOLON
                 {: RESULT = new RepeatStmtNode(e, new DeclListNode(v), new StmtListNode(s)); :}
                 | RETURN exp:e SEMICOLON
                 {: RESULT = new ReturnStmtNode(e); :}
-                | RETURN SEMICOLON   // GOTTA FIX THIS ONE
-                {: RESULT = new ReturnStmtNode(new StringLitNode(0, 0, "")); :}
+                | RETURN SEMICOLON
+                {: RESULT = new ReturnStmtNode(null); :}
                 | fncall:f SEMICOLON
                 {: RESULT = new CallStmtNode(f); :}
                 ;
 
 fncall          ::= id:i LPAREN RPAREN   // fn call with no args
-                {: RESULT = new CallExpNode(i); :}
+                {: RESULT = new CallExpNode(i, null); :}
                 | id:i LPAREN actualList:l RPAREN  // with args
                 {: RESULT = new CallExpNode(i, new ExpListNode(l)); :}
                 ;

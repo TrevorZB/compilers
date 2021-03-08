@@ -1,62 +1,125 @@
+// struct declaration
+struct s { 
+    int a; 
+    int b; 
+    int c;
+};
 
-struct s { int a; int b; };
+// empty formals func declaration
+void func() {
+    int a;
+    return 2 + 2;
+}
 
+// empty body func
+void empty_func() {}
+
+// non-empty formals func declaration
 int main(int c, int d) {
+    // var declarations
     int a;
     int b;
-    if (a) {
+    bool c;
+    bool d;
+    void e;
+    struct s a;
+
+    // assign to struct, perform operations with struct
+    a.a = 10;
+    a.b = 15;
+    a.c = a.a + a.b;
+
+    // assignments and literals
+    a = "hello";
+    b = 6;
+    b = a;
+    z = 4 * 2 + 3 / 1;
+    c = true;
+    d = false;
+
+    // relationals and equalities and conditional operators
+    c = a == b;
+    c = a != b;
+    c = a < b;
+    c = a > b;
+    c = a <= b;
+    c = a >= b;
+    c = c && d;
+    c = c || d;
+    c = !c;
+
+    // math operators, and cin/cout
+    i++;
+    i--;
+    cin >> i;
+    cout << i;
+    cout << "hello";
+    cout << i + 7;
+    i = i + i;
+    i = i - i;
+    i = i * i;
+    i = i / i;
+
+    // test parentheses
+    a = (a + b) * c;
+    a = (a + b * c);
+
+    // return statements
+    return a;
+    return a + b;
+    return 7;
+    return true;
+    return "hello";
+    return;
+
+    // if/else statement
+    if (a == b && b == c) {
         int a;
         int b;
         a = b;
-        return a;
+
+        // nested statement to test tab working
         if (b) {
-            a = "trevor";
+            int a;
+            a = 5;
             a = 17;
-            a = true;
-            a = false;
-            a = (1 + 1);
-            a = main(7, "abc");
-            a.s = 7;
         }
     }
     else {
         int a;
         int b;
         a = b;
-        return a;
     }
-    while (a) {
+
+    // while statement
+    while (a == 1) {
         int b;
         int c;
         b = a;
-        return b;
+
+        // test nesting of loops
+        while (a && b)
+        {
+            int z;
+            bool y;
+            z = 1;
+            y = true;
+        }
     }
-    repeat (a) {
+
+    // repeat statement
+    repeat (a != 9) {
         int a;
         int b;
         a = b;
-        return b;
     }
+
+    // call empty formals func
     func();
-    func(a, b);
-    a = b;
-    return a;
-    i++;
-    i--;
-    cin >> i;
-    cout << i;
-    i = i + i;
-    i = i - i;
-    i = i * i;
-    i = i / i;
-    i = !i;
-    i = i && i;
-    i = i || i;
-    i = i == i;
-    i = i != i;
-    i = i < i;
-    i = i > i;
-    i = i <= i;
-    i = i >= i;
-    i = -i;
+
+    // call non-empty formals func
+    func(a, b, s.a);
+
+    // call non-empty formals func with literals
+    func(5, 7, "hello", true);
 }
