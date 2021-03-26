@@ -6,7 +6,7 @@ int main() {
         return x;
     } else {
         int a;
-        return t;
+        return a;
     }
     while (a == b) {
         int a;

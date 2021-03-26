@@ -3,11 +3,11 @@ int main() {
     int x;
     if ((a == b)) {
         int t;
-        return x;
+        return x(int);
     }
     else {
         int a;
-        return t;
+        return a(int);
     }
     while ((a == b)) {
         int a;

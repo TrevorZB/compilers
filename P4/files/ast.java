@@ -291,7 +291,8 @@ class VarDeclNode extends DeclNode {
             String name = id.getMyStrVal();
             TSym lookup = s.lookupLocal(name);
             if (lookup == null) {
-                s.addDecl(name, new TSym(this.myType.getType()));
+                TSym tsym = new TSym(this.myType.getType());
+                s.addDecl(name, tsym);
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
                 ErrMsg.fatal_encountered = true;
@@ -872,7 +873,11 @@ class IdNode extends ExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-        p.print(myStrVal);
+        String out = myStrVal;
+        if (myTSym != null) {
+            out += "(" + myTSym + ")";
+        }
+        p.print(out);
     }
 
     public void name_analysis(SymTable s) {
