@@ -1,12 +1,13 @@
 int main() {
     int a;
-    int c;
+    int x;
     if ((a == b)) {
-        int a;
-        int a;
+        int t;
+        return x;
     }
     else {
         int a;
+        return t;
     }
     while ((a == b)) {
         int a;
