@@ -286,13 +286,24 @@ class VarDeclNode extends DeclNode {
     }
 
     public void name_analysis(SymTable s) {
+        boolean typeVoid = false;
+        IdNode id = this.myId;
+        String name = id.getMyStrVal();
+
+        if (myType.getType() == "void") {
+            ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Non-function declared void");
+            ErrMsg.fatal_encountered = true;
+            typeVoid = true;
+        }
+
         try {
-            IdNode id = this.myId;
-            String name = id.getMyStrVal();
             TSym lookup = s.lookupLocal(name);
+
             if (lookup == null) {
                 TSym tsym = new TSym(this.myType.getType());
-                s.addDecl(name, tsym);
+                if (!typeVoid) {
+                    s.addDecl(name, tsym);
+                }
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
                 ErrMsg.fatal_encountered = true;

@@ -1,6 +1,6 @@
-int main() {
-    int a;
+void main() {
     int x;
+    void x;
     if (a == b) {
         int t;
         return x;

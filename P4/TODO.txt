@@ -1,0 +1,4 @@
+Modify TSym class for all the info needed for functions and structs
+All the struct name analysis
+Main function should stop unparse if fatal error occured during name analysis
+Testing input files
