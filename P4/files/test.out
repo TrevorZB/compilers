@@ -1,7 +1,15 @@
+void g(int r, bool t) {
+}
+
+void f() {
+}
+
 void main() {
     int x;
-    void x;
-    if ((a == b)) {
+    bool i;
+    bool a;
+    bool b;
+    if ((a(bool) == b(bool))) {
         int t;
         return x(int);
     }
@@ -9,11 +17,13 @@ void main() {
         int a;
         return a(int);
     }
-    while ((a == b)) {
+    while ((a(bool) == b(bool))) {
         int a;
     }
-    repeat ((a == b)) {
+    repeat ((a(bool) == b(bool))) {
         int a;
     }
+    g(int,bool->void)(x(int), i(bool));
+    f(->void)();
 }
 

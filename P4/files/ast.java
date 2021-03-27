@@ -198,6 +198,20 @@ class FormalsListNode extends ASTnode {
         }
     }
 
+    public LinkedList<String> getFormalTypes() {
+        LinkedList<String> formalTypes = new LinkedList<String>();
+        Iterator it = myFormals.iterator();
+        try {
+            while (it.hasNext()) {
+                formalTypes.add(((FormalDeclNode)it.next()).getMyType().getType());
+            }
+        } catch (NoSuchElementException ex) {
+            System.err.println("unexpected NoSuchElementException in FormalDeclNode.print");
+            System.exit(-1);
+        }
+        return formalTypes;
+    }
+
     private List<FormalDeclNode> myFormals;
 }
 
@@ -256,6 +270,13 @@ class ExpListNode extends ASTnode {
                 p.print(", ");
                 it.next().unparse(p, indent);
             }
+        }
+    }
+
+    public void name_analysis(SymTable s) {
+        Iterator<ExpNode> it = myExps.iterator();
+        while (it.hasNext()) {
+            it.next().name_analysis(s);
         }
     }
 
@@ -350,7 +371,7 @@ class FnDeclNode extends DeclNode {
             String name = id.getMyStrVal();
             TSym lookup = s.lookupLocal(name);
             if (lookup == null) {
-                s.addDecl(name, new TSym(this.myType.getType()));
+                s.addDecl(name, new FuncTSym(this.myType.getType(), myFormalsList.getFormalTypes()));
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
                 ErrMsg.fatal_encountered = true;
@@ -398,6 +419,10 @@ class FormalDeclNode extends DeclNode {
             System.err.println("Exception occured during name analysis: " + ex);
             System.exit(-1);
         }
+    }
+
+    public TypeNode getMyType() {
+        return myType;
     }
 
     private TypeNode myType;
@@ -614,6 +639,7 @@ class IfStmtNode extends StmtNode {
 
     public void name_analysis(SymTable s) {
         try {
+            myExp.name_analysis(s);
             s.addScope();
             myDeclList.name_analysis(s);
             myStmtList.name_analysis(s);
@@ -659,6 +685,7 @@ class IfElseStmtNode extends StmtNode {
 
     public void name_analysis(SymTable s) {
         try {
+            myExp.name_analysis(s);
             s.addScope();
             myThenDeclList.name_analysis(s);
             myThenStmtList.name_analysis(s);
@@ -700,6 +727,7 @@ class WhileStmtNode extends StmtNode {
 
     public void name_analysis(SymTable s) {
         try {
+            myExp.name_analysis(s);
             s.addScope();
             myDeclList.name_analysis(s);
             myStmtList.name_analysis(s);
@@ -735,6 +763,7 @@ class RepeatStmtNode extends StmtNode {
 
     public void name_analysis(SymTable s) {
         try {
+            myExp.name_analysis(s);
             s.addScope();
             myDeclList.name_analysis(s);
             myStmtList.name_analysis(s);
@@ -762,7 +791,7 @@ class CallStmtNode extends StmtNode {
     }
 
     public void name_analysis(SymTable s) {
-        
+        myCall.name_analysis(s);
     }
 
     private CallExpNode myCall;
@@ -886,20 +915,40 @@ class IdNode extends ExpNode {
     public void unparse(PrintWriter p, int indent) {
         String out = myStrVal;
         if (myTSym != null) {
-            out += "(" + myTSym + ")";
+            if (myTSym instanceof FuncTSym) {
+                String formals = "(";
+                Iterator it = ((FuncTSym)myTSym).getMyFormalTypes().iterator();
+                try {
+                    while (it.hasNext()) {
+                        formals += ((String)it.next()) + ",";
+                    }
+                } catch (NoSuchElementException ex) {
+                    System.err.println("unexpected NoSuchElementException in DeclListNode.print");
+                    System.exit(-1);
+                }
+                if (formals.substring(formals.length() - 1).equals(",")) {
+                    formals = formals.substring(0, formals.length() - 1);
+                }
+                formals += "->" + myTSym.getType() + ")";
+                out += formals;
+            } else {
+                out += "(" + myTSym + ")";
+            }
         }
         p.print(out);
     }
 
     public void name_analysis(SymTable s) {
         try {
-            TSym lookup = s.lookupGlobal(myStrVal);
-            if (lookup == null) {
-                myTSym = null;
-                ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
-                ErrMsg.fatal_encountered = true;
-            } else {
-                myTSym = lookup;
+            if (myTSym == null) {
+                TSym lookup = s.lookupGlobal(myStrVal);
+                if (lookup == null) {
+                    myTSym = null;
+                    ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
+                    ErrMsg.fatal_encountered = true;
+                } else {
+                    myTSym = lookup;
+                }
             }
         } catch (EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -969,7 +1018,8 @@ class AssignNode extends ExpNode {
     }
 
     public void name_analysis(SymTable s) {
-
+        myLhs.name_analysis(s);
+        myExp.name_analysis(s);
     }
 
     private ExpNode myLhs;
@@ -997,7 +1047,10 @@ class CallExpNode extends ExpNode {
     }
 
     public void name_analysis(SymTable s) {
-
+        myId.name_analysis(s);
+        if (myExpList != null) {
+            myExpList.name_analysis(s);
+        }
     }
 
     private IdNode myId;
@@ -1010,7 +1063,7 @@ abstract class UnaryExpNode extends ExpNode {
     }
 
     public void name_analysis(SymTable s) {
-
+        myExp.name_analysis(s);
     }
 
     protected ExpNode myExp;
@@ -1023,7 +1076,8 @@ abstract class BinaryExpNode extends ExpNode {
     }
 
     public void name_analysis(SymTable s) {
-
+        myExp1.name_analysis(s);
+        myExp2.name_analysis(s);
     }
 
     protected ExpNode myExp1;
@@ -1044,6 +1098,10 @@ class UnaryMinusNode extends UnaryExpNode {
         myExp.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class NotNode extends UnaryExpNode {
@@ -1055,6 +1113,10 @@ class NotNode extends UnaryExpNode {
         p.print("(!");
         myExp.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }
 
@@ -1074,6 +1136,10 @@ class PlusNode extends BinaryExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class MinusNode extends BinaryExpNode {
@@ -1087,6 +1153,10 @@ class MinusNode extends BinaryExpNode {
         p.print(" - ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }
 
@@ -1102,6 +1172,10 @@ class TimesNode extends BinaryExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class DivideNode extends BinaryExpNode {
@@ -1115,6 +1189,10 @@ class DivideNode extends BinaryExpNode {
         p.print(" / ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }
 
@@ -1130,6 +1208,10 @@ class AndNode extends BinaryExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class OrNode extends BinaryExpNode {
@@ -1143,6 +1225,10 @@ class OrNode extends BinaryExpNode {
         p.print(" || ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }
 
@@ -1158,6 +1244,10 @@ class EqualsNode extends BinaryExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class NotEqualsNode extends BinaryExpNode {
@@ -1171,6 +1261,10 @@ class NotEqualsNode extends BinaryExpNode {
         p.print(" != ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }
 
@@ -1186,6 +1280,10 @@ class LessNode extends BinaryExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class GreaterNode extends BinaryExpNode {
@@ -1199,6 +1297,10 @@ class GreaterNode extends BinaryExpNode {
         p.print(" > ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }
 
@@ -1214,6 +1316,10 @@ class LessEqNode extends BinaryExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
+    }
 }
 
 class GreaterEqNode extends BinaryExpNode {
@@ -1227,5 +1333,9 @@ class GreaterEqNode extends BinaryExpNode {
         p.print(" >= ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+
+    public void name_analysis(SymTable s) {
+        super.name_analysis(s);
     }
 }

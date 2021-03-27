@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class TSym {
     private String type;
     
@@ -11,5 +13,18 @@ public class TSym {
 
     public String toString() {
         return type;
+    }
+}
+
+class FuncTSym extends TSym {
+    private LinkedList<String> myFormalTypes;
+
+    public FuncTSym(String type, LinkedList<String> formalTypes) {
+        super(type);
+        this.myFormalTypes = formalTypes;
+    }
+
+    public LinkedList<String> getMyFormalTypes() {
+        return this.myFormalTypes;
     }
 }

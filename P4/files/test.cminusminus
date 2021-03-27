@@ -1,6 +1,12 @@
+void g(int r, bool t) {}
+
+void f() {}
+
 void main() {
     int x;
-    void x;
+    bool i;
+    bool a;
+    bool b;
     if (a == b) {
         int t;
         return x;
@@ -14,4 +20,6 @@ void main() {
     repeat (a == b) {
         int a;
     }
+    g(x, i);
+    f();
 }
