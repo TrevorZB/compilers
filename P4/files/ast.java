@@ -321,9 +321,24 @@ class VarDeclNode extends DeclNode {
             TSym lookup = s.lookupLocal(name);
 
             if (lookup == null) {
-                TSym tsym = new TSym(this.myType.getType());
-                if (!typeVoid) {
-                    s.addDecl(name, tsym);
+                if (mySize != NOT_STRUCT) {
+                    IdNode struct_id = ((StructNode)this.myType).getId();
+                    TSym t = s.lookupGlobal(struct_id.getMyStrVal());
+                    if (t == null) {
+                        ErrMsg.fatal(struct_id.getMyLineNum(), struct_id.getMyCharNum(), "Invalid name of struct type");
+                        ErrMsg.fatal_encountered = true;
+                    } else if (!(t instanceof StructTSym)) {
+                        ErrMsg.fatal(struct_id.getMyLineNum(), struct_id.getMyCharNum(), "Invalid name of struct type");
+                        ErrMsg.fatal_encountered = true;
+                    } else {
+                        StructTSym tsym = new StructTSym(((StructNode)this.myType).getId().getMyStrVal(), ((StructTSym)t).getMyStructFields());
+                        s.addDecl(name, tsym);
+                    }
+                } else {
+                    TSym tsym = new TSym(this.myType.getType());
+                    if (!typeVoid) {
+                        s.addDecl(name, tsym);
+                    }
                 }
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
@@ -447,7 +462,23 @@ class StructDeclNode extends DeclNode {
     }
 
     public void name_analysis(SymTable s) {
-        System.out.println("struct decl node");
+        IdNode id = this.myId;
+        String name = id.getMyStrVal();
+        
+        try {
+            TSym lookup = s.lookupLocal(name);
+            if (lookup == null) {
+                StructTSym tsym = new StructTSym(name, new SymTable());
+                s.addDecl(name, tsym);
+                myDeclList.name_analysis(tsym.getMyStructFields());
+            } else {
+                ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
+                ErrMsg.fatal_encountered = true;
+            }
+        } catch (DuplicateSymException|EmptySymTableException ex) {
+            System.err.println("Exception occured during name analysis: " + ex);
+            System.exit(-1);
+        }
     }
 
     private IdNode myId;
@@ -510,6 +541,10 @@ class StructNode extends TypeNode {
         return "struct";
     }
 
+    public IdNode getId() {
+        return myId;
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("struct ");
         myId.unparse(p, 0);
@@ -538,7 +573,7 @@ class AssignStmtNode extends StmtNode {
     }
 
     public void name_analysis(SymTable s) {
-
+        myAssign.name_analysis(s);
     }
 
     private AssignNode myAssign;
@@ -556,7 +591,7 @@ class PostIncStmtNode extends StmtNode {
     }
 
     public void name_analysis(SymTable s) {
-        
+        myExp.name_analysis(s);
     }
 
     private ExpNode myExp;
@@ -574,7 +609,7 @@ class PostDecStmtNode extends StmtNode {
     }
 
     public void name_analysis(SymTable s) {
-        
+        myExp.name_analysis(s);
     }
 
     private ExpNode myExp;
@@ -593,7 +628,7 @@ class ReadStmtNode extends StmtNode {
     }
 
     public void name_analysis(SymTable s) {
-        
+        myExp.name_analysis(s);
     }
 
     // 1 child (actually can only be an IdNode or an ArrayExpNode)
@@ -613,7 +648,7 @@ class WriteStmtNode extends StmtNode {
     }
 
     public void name_analysis(SymTable s) {
-        
+        myExp.name_analysis(s);
     }
 
     private ExpNode myExp;
@@ -931,6 +966,8 @@ class IdNode extends ExpNode {
                 }
                 formals += "->" + myTSym.getType() + ")";
                 out += formals;
+            } else if (myTSym instanceof StructTSym) {
+                out += "(" + myTSym.getType() + ")";
             } else {
                 out += "(" + myTSym + ")";
             }
@@ -996,7 +1033,28 @@ class DotAccessExpNode extends ExpNode {
     }
 
     public void name_analysis(SymTable s) {
+        myLoc.name_analysis(s);
 
+        IdNode i = (IdNode) myLoc;
+        TSym t = i.getMyTSym();
+
+        try {
+            if (t instanceof StructTSym) {
+                SymTable st = ((StructTSym)t).getMyStructFields();
+                TSym lookup = st.lookupGlobal(myId.getMyStrVal());
+                myId.setMyTSym(lookup);
+                if (lookup == null) {
+                    ErrMsg.fatal(myId.getMyLineNum(), myId.getMyCharNum(), "Invalid struct field name");
+                    ErrMsg.fatal_encountered = true;
+                }
+            } else {
+                ErrMsg.fatal(i.getMyLineNum(), i.getMyCharNum(), "Dot-access of non-struct type");
+                ErrMsg.fatal_encountered = true;
+            }
+        }  catch (EmptySymTableException ex) {
+            System.err.println("Exception occured during name analysis: " + ex);
+            System.exit(-1);
+        }
     }
 
     private ExpNode myLoc;

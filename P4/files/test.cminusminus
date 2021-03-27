@@ -1,12 +1,28 @@
-void g(int r, bool t) {}
-
-void f() {}
+struct Point {
+    int x;
+    int y;
+};
+int f(int x, bool b) { }
+void g() {
+    int a;
+    bool b;
+    struct Point p;
+    p.x = a;
+    b = a == 3;
+    f(a + p.y*2, b);
+    g();
+}
 
 void main() {
+    int u;
+    struct Point p;
     int x;
     bool i;
     bool a;
     bool b;
+
+    p.y = 7;
+
     if (a == b) {
         int t;
         return x;

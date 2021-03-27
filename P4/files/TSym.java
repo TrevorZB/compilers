@@ -28,3 +28,16 @@ class FuncTSym extends TSym {
         return this.myFormalTypes;
     }
 }
+
+class StructTSym extends TSym {
+    private SymTable myStructFields;
+
+    public StructTSym(String type, SymTable structFields) {
+        super(type);
+        this.myStructFields = structFields;
+    }
+
+    public SymTable getMyStructFields() {
+        return this.myStructFields;
+    }
+}

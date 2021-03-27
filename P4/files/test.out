@@ -1,14 +1,29 @@
-void g(int r, bool t) {
+struct Point{
+    int x;
+    int y;
+};
+
+int f(int x, bool b) {
 }
 
-void f() {
+void g() {
+    int a;
+    bool b;
+    struct Point p;
+    (p(Point)).x(int) = a(int);
+    b(bool) = (a(int) == 3);
+    f(int,bool->int)((a(int) + ((p(Point)).y(int) * 2)), b(bool));
+    g(->void)();
 }
 
 void main() {
+    int u;
+    struct Point p;
     int x;
     bool i;
     bool a;
     bool b;
+    (p(Point)).y(int) = 7;
     if ((a(bool) == b(bool))) {
         int t;
         return x(int);
@@ -23,7 +38,7 @@ void main() {
     repeat ((a(bool) == b(bool))) {
         int a;
     }
-    g(int,bool->void)(x(int), i(bool));
-    f(->void)();
+    g(->void)(x(int), i(bool));
+    f(int,bool->int)();
 }
 
