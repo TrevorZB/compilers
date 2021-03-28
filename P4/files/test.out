@@ -1,44 +1,81 @@
-struct Point{
+int f(int a, bool b, int f) {
     int x;
     int y;
+    int z;
+    bool used;
+}
+
+int j() {
+    int j;
+}
+
+struct Inner{
+    int i;
 };
 
-int f(int x, bool b) {
-}
+struct Outer{
+    struct Inner i;
+};
 
-void g() {
-    int a;
-    bool b;
-    struct Point p;
-    (p(Point)).x(int) = a(int);
-    b(bool) = (a(int) == 3);
-    f(int,bool->int)((a(int) + ((p(Point)).y(int) * 2)), b(bool));
-    g(->void)();
-}
+struct Point{
+    bool Point;
+    int x;
+    int y;
+    int z;
+    bool used;
+};
 
 void main() {
-    int u;
-    struct Point p;
+    bool main;
+    int a;
+    int d;
     int x;
-    bool i;
-    bool a;
+    int y;
+    int z;
+    struct Point p;
+    struct Inner i;
+    struct Outer o;
+    bool used;
     bool b;
-    (p(Point)).y(int) = 7;
-    if ((a(bool) == b(bool))) {
-        int t;
-        return x(int);
+    bool c;
+    a(int)++;
+    a(int)--;
+    a(int) = d(int);
+    cin >> a(int);
+    cout << a(int);
+    return a(int);
+    if ((b(bool) == c(bool))) {
+        int a;
+    }
+    if ((b(bool) < c(bool))) {
+        int a;
     }
     else {
         int a;
-        return a(int);
     }
-    while ((a(bool) == b(bool))) {
+    while ((b(bool) > c(bool))) {
         int a;
     }
-    repeat ((a(bool) == b(bool))) {
+    repeat ((b(bool) <= c(bool))) {
         int a;
     }
-    g(->void)(x(int), i(bool));
-    f(int,bool->int)();
+    f(int,bool,int->int)(a(int), (!b(bool)));
+    (p(Point)).x(int) = a(int);
+    (p(Point)).y(int) = d(int);
+    (p(Point)).z(int) = z(int);
+    (p(Point)).used(bool) = (b(bool) && c(bool));
+    (p(Point)).used(bool) = (b(bool) || c(bool));
+    (p(Point)).x(int) = 5;
+    (p(Point)).used(bool) = false;
+    (p(Point)).used(bool) = true;
+    a(int) = (d(int) + x(int));
+    a(int) = (d(int) - x(int));
+    a(int) = (d(int) * x(int));
+    a(int) = (d(int) / x(int));
+    a(int) = (((p(Point)).x(int) + x(int)) - ((y(int) / (p(Point)).y(int)) * z(int)));
+    a(int) = (-(p(Point)).z(int));
+    ((o(Outer)).i(Inner)).i(int) = 10;
+    (o(Outer)).i(Inner) = i(Inner);
+    (i(Inner)).i(int) = 7;
 }
 

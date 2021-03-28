@@ -1,1 +1,76 @@
+struct p {
+    int a;
+    int a;
+    void b;
+};
 
+struct f {
+    int a;
+};
+void f () {}
+
+void func(int c, bool c) {}
+void func() {}
+void func2(int d) {int d;}
+
+struct good {
+    int x;
+    int y;
+    bool z;
+};
+
+int main() {
+    int t;
+    int t;
+    int q;
+    void b;
+
+    struct bad c;
+    struct q i;
+
+    struct good p;
+    p.r = 7;
+    q.r = 7;
+
+    a++;
+    a--;
+    a = d;
+    cin >> a;
+    cout << a;
+    return a;
+
+    a = d + x;
+    a = d - x;
+    a = d * x;
+    a = d / x;
+    a = p.x + x - y / p.y * z;
+    a = -p.z;
+    a = a && a;
+    a = a || a;
+    a = !a;
+
+    if (a == a) {
+        int a;
+        bool a;
+        void b;
+    }
+    if (a < a) {
+        int a;
+        bool a;
+        void b;
+    } else {
+        int a;
+        bool a;
+        void b;
+    }
+    while (a > a) {
+        int a;
+        bool a;
+        void b;
+    }
+    repeat (a <= a) {
+        int a;
+        bool a;
+        void b;
+    }
+}

@@ -131,8 +131,8 @@ class ProgramNode extends ASTnode {
         myDeclList.unparse(p, indent);
     }
 
-    public void name_analysis(SymTable s) {
-        myDeclList.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myDeclList.nameAnalysis(s);
     }
 
     private DeclListNode myDeclList;
@@ -155,11 +155,11 @@ class DeclListNode extends ASTnode {
         }
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s, SymTable ...structTable) {
         Iterator it = myDecls.iterator();
         try {
             while (it.hasNext()) {
-                ((DeclNode)it.next()).name_analysis(s);
+                ((DeclNode)it.next()).nameAnalysis(s, structTable);
             }
         } catch (NoSuchElementException ex) {
             System.err.println("unexpected NoSuchElementException in DeclListNode.print");
@@ -186,11 +186,11 @@ class FormalsListNode extends ASTnode {
         }
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         Iterator it = myFormals.iterator();
         try {
             while (it.hasNext()) {
-                ((FormalDeclNode)it.next()).name_analysis(s);
+                ((FormalDeclNode)it.next()).nameAnalysis(s);
             }
         } catch (NoSuchElementException ex) {
             System.err.println("unexpected NoSuchElementException in FormalDeclNode.print");
@@ -226,9 +226,9 @@ class FnBodyNode extends ASTnode {
         myStmtList.unparse(p, indent);
     }
 
-    public void name_analysis(SymTable s) {
-        myDeclList.name_analysis(s);
-        myStmtList.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myDeclList.nameAnalysis(s);
+        myStmtList.nameAnalysis(s);
     }
 
     private DeclListNode myDeclList;
@@ -247,10 +247,10 @@ class StmtListNode extends ASTnode {
         }
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         Iterator<StmtNode> it = myStmts.iterator();
         while (it.hasNext()) {
-            it.next().name_analysis(s);
+            it.next().nameAnalysis(s);
         }
     }
 
@@ -273,10 +273,10 @@ class ExpListNode extends ASTnode {
         }
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         Iterator<ExpNode> it = myExps.iterator();
         while (it.hasNext()) {
-            it.next().name_analysis(s);
+            it.next().nameAnalysis(s);
         }
     }
 
@@ -288,7 +288,7 @@ class ExpListNode extends ASTnode {
 // **********************************************************************
 
 abstract class DeclNode extends ASTnode {
-    abstract public void name_analysis(SymTable s);
+    abstract public void nameAnalysis(SymTable s, SymTable ...structTable);
 }
 
 class VarDeclNode extends DeclNode {
@@ -306,14 +306,14 @@ class VarDeclNode extends DeclNode {
         p.println(";");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s, SymTable ...structTable) {
         boolean typeVoid = false;
         IdNode id = this.myId;
         String name = id.getMyStrVal();
 
         if (myType.getType() == "void") {
             ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Non-function declared void");
-            ErrMsg.fatal_encountered = true;
+            ErrMsg.fatalEncountered = true;
             typeVoid = true;
         }
 
@@ -322,14 +322,19 @@ class VarDeclNode extends DeclNode {
 
             if (lookup == null) {
                 if (mySize != NOT_STRUCT) {
+                    TSym t;
                     IdNode struct_id = ((StructNode)this.myType).getId();
-                    TSym t = s.lookupGlobal(struct_id.getMyStrVal());
+                    if (structTable.length != 0) {
+                        t = structTable[0].lookupGlobal(struct_id.getMyStrVal());
+                    } else {
+                        t = s.lookupGlobal(struct_id.getMyStrVal());
+                    }
                     if (t == null) {
                         ErrMsg.fatal(struct_id.getMyLineNum(), struct_id.getMyCharNum(), "Invalid name of struct type");
-                        ErrMsg.fatal_encountered = true;
+                        ErrMsg.fatalEncountered = true;
                     } else if (!(t instanceof StructTSym)) {
                         ErrMsg.fatal(struct_id.getMyLineNum(), struct_id.getMyCharNum(), "Invalid name of struct type");
-                        ErrMsg.fatal_encountered = true;
+                        ErrMsg.fatalEncountered = true;
                     } else {
                         StructTSym tsym = new StructTSym(((StructNode)this.myType).getId().getMyStrVal(), ((StructTSym)t).getMyStructFields());
                         s.addDecl(name, tsym);
@@ -342,7 +347,7 @@ class VarDeclNode extends DeclNode {
                 }
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
-                ErrMsg.fatal_encountered = true;
+                ErrMsg.fatalEncountered = true;
             }
         } catch (DuplicateSymException|EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -380,7 +385,7 @@ class FnDeclNode extends DeclNode {
         p.println("}\n");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s, SymTable ...structTable) {
         try {
             IdNode id = this.myId;
             String name = id.getMyStrVal();
@@ -389,11 +394,11 @@ class FnDeclNode extends DeclNode {
                 s.addDecl(name, new FuncTSym(this.myType.getType(), myFormalsList.getFormalTypes()));
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
-                ErrMsg.fatal_encountered = true;
+                ErrMsg.fatalEncountered = true;
             }
             s.addScope();
-            myFormalsList.name_analysis(s);
-            myBody.name_analysis(s);
+            myFormalsList.nameAnalysis(s);
+            myBody.nameAnalysis(s);
             s.removeScope();
         } catch (DuplicateSymException|EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -419,7 +424,7 @@ class FormalDeclNode extends DeclNode {
         myId.unparse(p, 0);
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s, SymTable ...structTable) {
         try {
             IdNode id = this.myId;
             String name = id.getMyStrVal();
@@ -428,7 +433,7 @@ class FormalDeclNode extends DeclNode {
                 s.addDecl(name, new TSym(this.myType.getType()));
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
-                ErrMsg.fatal_encountered = true;
+                ErrMsg.fatalEncountered = true;
             }
         } catch (DuplicateSymException|EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -461,7 +466,7 @@ class StructDeclNode extends DeclNode {
 
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s, SymTable ...structTable) {
         IdNode id = this.myId;
         String name = id.getMyStrVal();
         
@@ -470,10 +475,10 @@ class StructDeclNode extends DeclNode {
             if (lookup == null) {
                 StructTSym tsym = new StructTSym(name, new SymTable());
                 s.addDecl(name, tsym);
-                myDeclList.name_analysis(tsym.getMyStructFields());
+                myDeclList.nameAnalysis(tsym.getMyStructFields(), s);
             } else {
                 ErrMsg.fatal(id.getMyLineNum(), id.getMyCharNum(), "Multiply declared identifier");
-                ErrMsg.fatal_encountered = true;
+                ErrMsg.fatalEncountered = true;
             }
         } catch (DuplicateSymException|EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -558,7 +563,7 @@ class StructNode extends TypeNode {
 // **********************************************************************
 
 abstract class StmtNode extends ASTnode {
-    abstract public void name_analysis(SymTable s);
+    abstract public void nameAnalysis(SymTable s);
 }
 
 class AssignStmtNode extends StmtNode {
@@ -572,8 +577,8 @@ class AssignStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void name_analysis(SymTable s) {
-        myAssign.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myAssign.nameAnalysis(s);
     }
 
     private AssignNode myAssign;
@@ -590,8 +595,8 @@ class PostIncStmtNode extends StmtNode {
         p.println("++;");
     }
 
-    public void name_analysis(SymTable s) {
-        myExp.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myExp.nameAnalysis(s);
     }
 
     private ExpNode myExp;
@@ -608,8 +613,8 @@ class PostDecStmtNode extends StmtNode {
         p.println("--;");
     }
 
-    public void name_analysis(SymTable s) {
-        myExp.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myExp.nameAnalysis(s);
     }
 
     private ExpNode myExp;
@@ -627,8 +632,8 @@ class ReadStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void name_analysis(SymTable s) {
-        myExp.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myExp.nameAnalysis(s);
     }
 
     // 1 child (actually can only be an IdNode or an ArrayExpNode)
@@ -647,8 +652,8 @@ class WriteStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void name_analysis(SymTable s) {
-        myExp.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myExp.nameAnalysis(s);
     }
 
     private ExpNode myExp;
@@ -672,12 +677,12 @@ class IfStmtNode extends StmtNode {
         p.println("}");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         try {
-            myExp.name_analysis(s);
+            myExp.nameAnalysis(s);
             s.addScope();
-            myDeclList.name_analysis(s);
-            myStmtList.name_analysis(s);
+            myDeclList.nameAnalysis(s);
+            myStmtList.nameAnalysis(s);
             s.removeScope();
         } catch (EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -718,16 +723,16 @@ class IfElseStmtNode extends StmtNode {
         p.println("}");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         try {
-            myExp.name_analysis(s);
+            myExp.nameAnalysis(s);
             s.addScope();
-            myThenDeclList.name_analysis(s);
-            myThenStmtList.name_analysis(s);
+            myThenDeclList.nameAnalysis(s);
+            myThenStmtList.nameAnalysis(s);
             s.removeScope();
             s.addScope();
-            myElseDeclList.name_analysis(s);
-            myElseStmtList.name_analysis(s);
+            myElseDeclList.nameAnalysis(s);
+            myElseStmtList.nameAnalysis(s);
             s.removeScope();
         } catch (EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -760,12 +765,12 @@ class WhileStmtNode extends StmtNode {
         p.println("}");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         try {
-            myExp.name_analysis(s);
+            myExp.nameAnalysis(s);
             s.addScope();
-            myDeclList.name_analysis(s);
-            myStmtList.name_analysis(s);
+            myDeclList.nameAnalysis(s);
+            myStmtList.nameAnalysis(s);
             s.removeScope();
         } catch (EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -796,12 +801,12 @@ class RepeatStmtNode extends StmtNode {
         p.println("}");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         try {
-            myExp.name_analysis(s);
+            myExp.nameAnalysis(s);
             s.addScope();
-            myDeclList.name_analysis(s);
-            myStmtList.name_analysis(s);
+            myDeclList.nameAnalysis(s);
+            myStmtList.nameAnalysis(s);
             s.removeScope();
         } catch (EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
@@ -825,8 +830,8 @@ class CallStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void name_analysis(SymTable s) {
-        myCall.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myCall.nameAnalysis(s);
     }
 
     private CallExpNode myCall;
@@ -847,9 +852,9 @@ class ReturnStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         if (myExp != null) {
-            myExp.name_analysis(s);
+            myExp.nameAnalysis(s);
         }
     }
 
@@ -861,7 +866,7 @@ class ReturnStmtNode extends StmtNode {
 // **********************************************************************
 
 abstract class ExpNode extends ASTnode {
-    abstract public void name_analysis(SymTable s);
+    abstract public void nameAnalysis(SymTable s);
 }
 
 class IntLitNode extends ExpNode {
@@ -875,7 +880,7 @@ class IntLitNode extends ExpNode {
         p.print(myIntVal);
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
 
     }
 
@@ -895,7 +900,7 @@ class StringLitNode extends ExpNode {
         p.print(myStrVal);
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
 
     }
 
@@ -914,7 +919,7 @@ class TrueNode extends ExpNode {
         p.print("true");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
 
     }
 
@@ -932,7 +937,7 @@ class FalseNode extends ExpNode {
         p.print("false");
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
 
     }
 
@@ -975,14 +980,14 @@ class IdNode extends ExpNode {
         p.print(out);
     }
 
-    public void name_analysis(SymTable s) {
+    public void nameAnalysis(SymTable s) {
         try {
             if (myTSym == null) {
                 TSym lookup = s.lookupGlobal(myStrVal);
                 if (lookup == null) {
                     myTSym = null;
                     ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
-                    ErrMsg.fatal_encountered = true;
+                    ErrMsg.fatalEncountered = true;
                 } else {
                     myTSym = lookup;
                 }
@@ -1032,10 +1037,14 @@ class DotAccessExpNode extends ExpNode {
         myId.unparse(p, 0);
     }
 
-    public void name_analysis(SymTable s) {
-        myLoc.name_analysis(s);
-
-        IdNode i = (IdNode) myLoc;
+    public void nameAnalysis(SymTable s) {
+        IdNode i;
+        myLoc.nameAnalysis(s);
+        if (myLoc instanceof IdNode) {
+            i = (IdNode) myLoc;
+        } else {
+            i = ((DotAccessExpNode)myLoc).getMyId();
+        }
         TSym t = i.getMyTSym();
 
         try {
@@ -1045,16 +1054,21 @@ class DotAccessExpNode extends ExpNode {
                 myId.setMyTSym(lookup);
                 if (lookup == null) {
                     ErrMsg.fatal(myId.getMyLineNum(), myId.getMyCharNum(), "Invalid struct field name");
-                    ErrMsg.fatal_encountered = true;
+                    ErrMsg.fatalEncountered = true;
                 }
             } else {
                 ErrMsg.fatal(i.getMyLineNum(), i.getMyCharNum(), "Dot-access of non-struct type");
-                ErrMsg.fatal_encountered = true;
+                ErrMsg.fatalEncountered = true;
             }
         }  catch (EmptySymTableException ex) {
             System.err.println("Exception occured during name analysis: " + ex);
             System.exit(-1);
         }
+    }
+
+
+    public IdNode getMyId() {
+        return myId;
     }
 
     private ExpNode myLoc;
@@ -1075,9 +1089,9 @@ class AssignNode extends ExpNode {
         if (indent != -1)  p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        myLhs.name_analysis(s);
-        myExp.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myLhs.nameAnalysis(s);
+        myExp.nameAnalysis(s);
     }
 
     private ExpNode myLhs;
@@ -1104,10 +1118,10 @@ class CallExpNode extends ExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        myId.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myId.nameAnalysis(s);
         if (myExpList != null) {
-            myExpList.name_analysis(s);
+            myExpList.nameAnalysis(s);
         }
     }
 
@@ -1120,8 +1134,8 @@ abstract class UnaryExpNode extends ExpNode {
         myExp = exp;
     }
 
-    public void name_analysis(SymTable s) {
-        myExp.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myExp.nameAnalysis(s);
     }
 
     protected ExpNode myExp;
@@ -1133,9 +1147,9 @@ abstract class BinaryExpNode extends ExpNode {
         myExp2 = exp2;
     }
 
-    public void name_analysis(SymTable s) {
-        myExp1.name_analysis(s);
-        myExp2.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        myExp1.nameAnalysis(s);
+        myExp2.nameAnalysis(s);
     }
 
     protected ExpNode myExp1;
@@ -1157,8 +1171,8 @@ class UnaryMinusNode extends UnaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1173,8 +1187,8 @@ class NotNode extends UnaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1195,8 +1209,8 @@ class PlusNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1213,8 +1227,8 @@ class MinusNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1231,8 +1245,8 @@ class TimesNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1249,8 +1263,8 @@ class DivideNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1267,8 +1281,8 @@ class AndNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1285,8 +1299,8 @@ class OrNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1303,8 +1317,8 @@ class EqualsNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1321,8 +1335,8 @@ class NotEqualsNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1339,8 +1353,8 @@ class LessNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1357,8 +1371,8 @@ class GreaterNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1375,8 +1389,8 @@ class LessEqNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }
 
@@ -1393,7 +1407,7 @@ class GreaterEqNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void name_analysis(SymTable s) {
-        super.name_analysis(s);
+    public void nameAnalysis(SymTable s) {
+        super.nameAnalysis(s);
     }
 }

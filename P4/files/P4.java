@@ -56,8 +56,10 @@ public class P4 {
 
 	// ADD NAME ANALYSIS PART HERE
         SymTable s = new SymTable();
-        ((ProgramNode)root.value).name_analysis(s);
-        ((ASTnode)root.value).unparse(outFile, 0);
+        ((ProgramNode)root.value).nameAnalysis(s);
+        if (!ErrMsg.fatalEncountered) {
+            ((ASTnode)root.value).unparse(outFile, 0);
+        }
         outFile.close();
 
         return;

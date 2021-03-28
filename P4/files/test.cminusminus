@@ -1,41 +1,87 @@
-struct Point {
+int f(int a, bool b, int f) {
     int x;
     int y;
-};
-int f(int x, bool b) { }
-void g() {
-    int a;
-    bool b;
-    struct Point p;
-    p.x = a;
-    b = a == 3;
-    f(a + p.y*2, b);
-    g();
+    int z;
+    bool used;
 }
+
+int j() {
+    int j;
+}
+
+struct Inner {
+    int i;
+};
+
+struct Outer {
+    struct Inner i;
+};
+
+struct Point {
+    bool Point;
+    int x;
+    int y;
+    int z;
+    bool used;
+};
 
 void main() {
-    int u;
-    struct Point p;
+    bool main;
+    int a;
+    int d;
     int x;
-    bool i;
-    bool a;
+    int y;
+    int z;
+    struct Point p;
+    struct Inner i;
+    struct Outer o;
+    bool used;
     bool b;
+    bool c;
 
-    p.y = 7;
+    a++;
+    a--;
+    a = d;
+    cin >> a;
+    cout << a;
+    return a;
 
-    if (a == b) {
-        int t;
-        return x;
+    if (b == c) {
+        int a;
+    }
+    if (b < c) {
+        int a;
     } else {
         int a;
-        return a;
     }
-    while (a == b) {
+    while (b > c) {
         int a;
     }
-    repeat (a == b) {
+    repeat (b <= c) {
         int a;
     }
-    g(x, i);
-    f();
+
+    f(a, !b);
+
+    p.x = a;
+    p.y = d;
+    p.z = z;
+    p.used = b && c;
+    p.used = b || c;
+    p.x = 5;
+    p.used = false;
+    p.used = true;
+
+    a = d + x;
+    a = d - x;
+    a = d * x;
+    a = d / x;
+    a = p.x + x - y / p.y * z;
+    a = -p.z;
+
+    o.i.i = 10;
+    o.i = i;
+    i.i = 7;
+
 }
+

@@ -24,5 +24,5 @@ class ErrMsg {
         System.err.println(lineNum + ":" + charNum + " ***WARNING*** " + msg);
     }
 
-    static boolean fatal_encountered = false;
+    public static boolean fatalEncountered = false;
 }
