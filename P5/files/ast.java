@@ -361,6 +361,12 @@ class ExpListNode extends ASTnode {
         }
     }
 
+    public void typeCheck(SymTable symTab) {
+        for (ExpNode node : myExps) {
+            node.typeCheck(symTab);
+        }
+    }
+
     public int getSize() {
         return myExps.size();
     }
@@ -907,6 +913,7 @@ class PostIncStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
+        myExp.typeCheck(symTab);
         if (!myExp.getType(symTab).isIntType()) {
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
             myType = new ErrorType();
@@ -937,6 +944,7 @@ class PostDecStmtNode extends StmtNode {
     }
     
     public void typeCheck(SymTable symTab) {
+        myExp.typeCheck(symTab);
         if (!myExp.getType(symTab).isIntType()) {
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
             myType = new ErrorType();
@@ -1071,6 +1079,7 @@ class IfStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
+        myExp.typeCheck(symTab);
         Type type1 = myExp.getType(symTab);
         Type tempBoolType = new BoolType();
 
@@ -1145,6 +1154,7 @@ class IfElseStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
+        myExp.typeCheck(symTab);
         Type type1 = myExp.getType(symTab);
         Type tempBoolType = new BoolType();
 
@@ -1211,6 +1221,7 @@ class WhileStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
+        myExp.typeCheck(symTab);
         Type type1 = myExp.getType(symTab);
         Type tempBoolType = new BoolType();
 
@@ -1268,6 +1279,7 @@ class RepeatStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
+        myExp.typeCheck(symTab);
         Type type1 = myExp.getType(symTab);
 
         if (!type1.isIntType()) {
@@ -1343,7 +1355,9 @@ class ReturnStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
-        myExp.typeCheck(symTab);
+        if (myExp != null) {
+            myExp.typeCheck(symTab);
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1747,6 +1761,13 @@ class AssignNode extends ExpNode {
         myExp = exp;
     }
 
+    public int lineNum() {
+        return myLhs.lineNum();
+    }
+    public int charNum() {
+        return myLhs.charNum();
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's 
@@ -1848,6 +1869,7 @@ class CallExpNode extends ExpNode {
     }
     
     public void typeCheck(SymTable symTab) {
+        myExpList.typeCheck(symTab);
         Type idType = myId.sym().getType();
         if (!idType.equals(new FnType())) {
             ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
@@ -1859,17 +1881,15 @@ class CallExpNode extends ExpNode {
             } catch (EmptySymTableException ex) {}
             int testSize = myExpList == null ? 0 : myExpList.getSize();
             if (fnSym.getNumParams() != testSize) {
-                ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");  
-                myType = new ErrorType();
+                ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");
             } else {
                 List<Type> l = fnSym.getParamTypes();
                 for (int i = 0; i < l.size(); i++) {
                     Type type1 = l.get(i);
                     ExpNode e = myExpList.getList().get(i);
                     Type type2 = e.getType(symTab);
-                    if (!type1.equals(type2)) {
-                        ErrMsg.fatal(e.lineNum(), e.charNum(), "Type of actual does not match type of formal");  
-                        myType = new ErrorType();
+                    if (!type2.isErrorType() && !type1.equals(type2)) {
+                        ErrMsg.fatal(e.lineNum(), e.charNum(), "Type of actual does not match type of formal");
                     }
                 }
             }
@@ -2024,6 +2044,9 @@ class PlusNode extends BinaryExpNode {
         return new IntType();
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public void typeCheck(SymTable symTab) {
         myExp1.typeCheck(symTab);
         myExp2.typeCheck(symTab);
@@ -2059,6 +2082,9 @@ class MinusNode extends BinaryExpNode {
     public MinusNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
     }
+
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
 
     public Type getType(SymTable symTab) {
         if (myType != null) {
@@ -2103,6 +2129,9 @@ class TimesNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public Type getType(SymTable symTab) {
         if (myType != null) {
             return myType;
@@ -2145,6 +2174,9 @@ class DivideNode extends BinaryExpNode {
     public DivideNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
     }
+
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
 
     public Type getType(SymTable symTab) {
         if (myType != null) {
@@ -2189,6 +2221,9 @@ class AndNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public Type getType(SymTable symTab) {
         if (myType != null) {
             return myType;
@@ -2232,6 +2267,9 @@ class OrNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public Type getType(SymTable symTab) {
         if (myType != null) {
             return myType;
@@ -2274,6 +2312,9 @@ class EqualsNode extends BinaryExpNode {
     public EqualsNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
     }
+
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
 
     public Type getType(SymTable symTab) {
         if (myType != null) {
@@ -2333,6 +2374,9 @@ class NotEqualsNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public Type getType(SymTable symTab) {
         if (myType != null) {
             return myType;
@@ -2355,6 +2399,26 @@ class NotEqualsNode extends BinaryExpNode {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
             myType = new ErrorType();
         }
+
+        if (type1.isFnType() && type2.isFnType()) {
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
+            myType = new ErrorType();
+        }
+
+        if (type1.isVoidType() && type2.isVoidType()) {
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
+            myType = new ErrorType();
+        }
+
+        if (type1.isStructType() && type2.isStructType()) {
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct variables");
+            myType = new ErrorType();
+        }
+
+        if (type1.isStructDefType() && type2.isStructDefType()) {
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct names");
+            myType = new ErrorType();
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -2370,6 +2434,9 @@ class LessNode extends BinaryExpNode {
     public LessNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
     }
+
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
 
     public Type getType(SymTable symTab) {
         if (myType != null) {
@@ -2414,6 +2481,9 @@ class GreaterNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public Type getType(SymTable symTab) {
         if (myType != null) {
             return myType;
@@ -2457,6 +2527,9 @@ class LessEqNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
+
     public Type getType(SymTable symTab) {
         if (myType != null) {
             return myType;
@@ -2499,6 +2572,9 @@ class GreaterEqNode extends BinaryExpNode {
     public GreaterEqNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
     }
+
+    public int lineNum() {return myExp1.lineNum();}
+    public int charNum() {return myExp1.charNum();}
 
     public Type getType(SymTable symTab) {
         if (myType != null) {

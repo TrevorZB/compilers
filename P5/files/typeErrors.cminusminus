@@ -1,0 +1,208 @@
+bool q(int a){return true;}
+void f(){}
+void g(int a){return 1;}
+int h(){return true;}
+int m(){return;}
+struct P{int a;};
+
+void main() {
+    int a;
+    bool b;
+    struct P p;
+
+    cout << f;
+    cout << f();
+    cout << P;
+    cout << p;
+    cin >> f;
+    cin >> P;
+    cin >> p;
+    a();
+    f(8);
+    g(true);
+    a = b + a;
+    a = "string" - 1;
+    a = 1 / b;
+    a = true * 1;
+    a = b < a;
+    a = "string" > 1;
+    a = 1 <= b;
+    a = true >= 1;
+    b = !a;
+    b = 8 && true;
+    b = true || "string";
+    b = b == a;
+    b = b == 7;
+    b = b == "string";
+    b = a == "string";
+    b = a == true;
+    b = b != a;
+    b = b != 7;
+    b = b != "string";
+    b = a != "string";
+    b = a != true;
+    b = f() == g(1);
+    b = f() != g(1);
+    b = f == g;
+    b = f != g;
+    b = p == p;
+    b = p != p;
+    b = P == P;
+    b = P != P;
+    f = g;
+    P = P;
+    p = p;
+
+    if (true) {
+        cout << f;
+        cout << f();
+        cout << P;
+        cout << p;
+        cin >> f;
+        cin >> P;
+        cin >> p;
+        a();
+        f(8);
+        g(true);
+        a = b + a;
+        a = "string" - 1;
+        a = 1 / b;
+        a = true * 1;
+        a = b < a;
+        a = "string" > 1;
+        a = 1 <= b;
+        a = true >= 1;
+        b = !a;
+        b = 8 && true;
+        b = true || "string";
+        b = b == a;
+        b = b == 7;
+        b = b == "string";
+        b = a == "string";
+        b = a == true;
+        b = b != a;
+        b = b != 7;
+        b = b != "string";
+        b = a != "string";
+        b = a != true;
+        b = f() == g(1);
+        b = f() != g(1);
+        b = f == g;
+        b = f != g;
+        b = p == p;
+        b = p != p;
+        b = P == P;
+        b = P != P;
+        f = g;
+        P = P;
+        p = p;
+    }
+
+    while (true) {
+        cout << f;
+        cout << f();
+        cout << P;
+        cout << p;
+        cin >> f;
+        cin >> P;
+        cin >> p;
+        a();
+        f(8);
+        g(true);
+        a = b + a;
+        a = "string" - 1;
+        a = 1 / b;
+        a = true * 1;
+        a = b < a;
+        a = "string" > 1;
+        a = 1 <= b;
+        a = true >= 1;
+        b = !a;
+        b = 8 && true;
+        b = true || "string";
+        b = b == a;
+        b = b == 7;
+        b = b == "string";
+        b = a == "string";
+        b = a == true;
+        b = b != a;
+        b = b != 7;
+        b = b != "string";
+        b = a != "string";
+        b = a != true;
+        b = f() == g(1);
+        b = f() != g(1);
+        b = f == g;
+        b = f != g;
+        b = p == p;
+        b = p != p;
+        b = P == P;
+        b = P != P;
+        f = g;
+        P = P;
+        p = p;
+    }
+    repeat (1) {
+        cout << f;
+        cout << f();
+        cout << P;
+        cout << p;
+        cin >> f;
+        cin >> P;
+        cin >> p;
+        a();
+        f(8);
+        g(true);
+        a = b + a;
+        a = "string" - 1;
+        a = 1 / b;
+        a = true * 1;
+        a = b < a;
+        a = "string" > 1;
+        a = 1 <= b;
+        a = true >= 1;
+        b = !a;
+        b = 8 && true;
+        b = true || "string";
+        b = b == a;
+        b = b == 7;
+        b = b == "string";
+        b = a == "string";
+        b = a == true;
+        b = b != a;
+        b = b != 7;
+        b = b != "string";
+        b = a != "string";
+        b = a != true;
+        b = f() == g(1);
+        b = f() != g(1);
+        b = f == g;
+        b = f != g;
+        b = p == p;
+        b = p != p;
+        b = P == P;
+        b = P != P;
+        f = g;
+        P = P;
+        p = p;
+    }
+    if (a) {}
+    if (7) {}
+    if ("string") {}
+    while (a) {}
+    while (7) {}
+    while ("string") {}
+    repeat ("string") {}
+    repeat (true) {}
+    repeat (b) {}
+    cout << P + 1;
+    a = (true + 3) * 4;
+    b = true && (false || 3);
+    q("a" * 4); 
+    a = 1 + p();
+    b = (true + 3) == a;
+    a = true + "hello";
+    a = 1 + q(true);
+    a = 1 + q(1, 2);
+    return 3+true;
+}
