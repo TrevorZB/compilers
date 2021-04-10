@@ -1,0 +1,11 @@
+void f(int x, int y, bool z) {
+}
+
+void g() {
+}
+
+int main() {
+    int a;
+    a(int) = f(int,int,bool->void)(true, 2, 3);
+}
+

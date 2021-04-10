@@ -1,11 +1,7 @@
-void f(){}
+void f(int x, int y, bool z){}
 void g(){}
 
 int main() {
     int a;
-    int b;
-    int c;
-    bool x;
-
-    c = f() == g();
+    a = f(true, 2, 3);
 }

@@ -337,6 +337,10 @@ class ExpListNode extends ASTnode {
     public int getSize() {
         return myExps.size();
     }
+
+    public List<ExpNode> getList() {
+        return myExps;
+    }
     
     public void unparse(PrintWriter p, int indent) {
         Iterator<ExpNode> it = myExps.iterator();
@@ -1714,14 +1718,26 @@ class CallExpNode extends ExpNode {
         Type idType = myId.sym().getType();
         if (!idType.equals(new FnType())) {
             ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
-        } else if (myExpList != null) {
-            if (myExpList.)
+        } else {
+            FnSym fnSym = null;
+            try {
+                fnSym = (FnSym)symTab.lookupGlobal(myId.name());
+            } catch (EmptySymTableException ex) {}
+            int testSize = myExpList == null ? 0 : myExpList.getSize();
+            if (fnSym.getNumParams() != testSize) {
+                ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");  
+            } else {
+                List<Type> l = fnSym.getParamTypes();
+                for (int i = 0; i < l.size(); i++) {
+                    Type type1 = l.get(i);
+                    ExpNode e = myExpList.getList().get(i);
+                    Type type2 = e.getType(symTab);
+                    if (!type1.equals(type2)) {
+                        ErrMsg.fatal(e.lineNum(), e.charNum(), "Type of actual does not match type of formal");  
+                    }
+                }
+            }
         }
-
-    }
-
-    public Type getType(SymTable symTab) {
-
     }
     
     // ** unparse **
