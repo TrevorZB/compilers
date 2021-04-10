@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import javax.sound.sampled.AudioFileFormat.Type;
+
 // **********************************************************************
 // The ASTnode class defines the nodes of the abstract-syntax tree that
 // represents a C-- program.
@@ -942,7 +944,12 @@ class ReadStmtNode extends StmtNode {
     }  
     
     public void typeCheck(SymTable symTab) {
-        
+        myExp.typeCheck(symTab);
+        Type type1 = myExp.getType(symTab);
+
+        if (type1.isFnType()) {
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a function");
+        }
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -970,7 +977,15 @@ class WriteStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
-        
+        myExp.typeCheck(symTab);
+        Type type1 = myExp.getType(symTab);
+
+        if (type1.isFnType()) {
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
+        }
+        if (myExp.isVoidType()) {
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write void");
+        }
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -1087,7 +1102,14 @@ class IfElseStmtNode extends StmtNode {
     }
 
     public void typeCheck(SymTable symTab) {
-        
+        Type type1 = myExp.getType(symTab);
+        Type tempBoolType = new BoolType();
+
+        if (!type1.equals(tempBoolType)) {
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-bool expression used as an if condition");
+        }
+        myThenStmtList.typeCheck(symTab);
+        myElseStmtList.typeCheck(symTab);
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -1678,6 +1700,15 @@ class AssignNode extends ExpNode {
     public void typeCheck(SymTable symTab) {
         this.myLhs.typeCheck(symTab);
         this.myExp.typeCheck(symTab);
+
+        Type type1 = myLhs.getType();
+        Type type2 = myExp.getType();
+
+        if (!type1.equals(type2)) {
+            ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Type mismatch");
+        } else if (type1.equals(new FnType())) {
+            ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Function assignment");
+        }
     }
     
     public void unparse(PrintWriter p, int indent) {

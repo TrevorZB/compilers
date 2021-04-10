@@ -3,5 +3,5 @@ void g(){}
 
 int main() {
     int a;
-    a = f(true, 2, 3);
+    a = f(1, 2, true) == g();
 }
