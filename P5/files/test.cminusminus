@@ -1,0 +1,11 @@
+void f(){}
+void g(){}
+
+int main() {
+    int a;
+    int b;
+    int c;
+    bool x;
+
+    c = f() == g();
+}
