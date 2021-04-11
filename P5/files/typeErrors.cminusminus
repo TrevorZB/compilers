@@ -9,7 +9,6 @@ void main() {
     int a;
     bool b;
     struct P p;
-
     cout << f;
     cout << f();
     cout << P;
@@ -52,7 +51,6 @@ void main() {
     f = g;
     P = P;
     p = p;
-
     if (true) {
         cout << f;
         cout << f();
@@ -97,7 +95,50 @@ void main() {
         P = P;
         p = p;
     }
-
+    if (false) {} else {
+        cout << f;
+        cout << f();
+        cout << P;
+        cout << p;
+        cin >> f;
+        cin >> P;
+        cin >> p;
+        a();
+        f(8);
+        g(true);
+        a = b + a;
+        a = "string" - 1;
+        a = 1 / b;
+        a = true * 1;
+        a = b < a;
+        a = "string" > 1;
+        a = 1 <= b;
+        a = true >= 1;
+        b = !a;
+        b = 8 && true;
+        b = true || "string";
+        b = b == a;
+        b = b == 7;
+        b = b == "string";
+        b = a == "string";
+        b = a == true;
+        b = b != a;
+        b = b != 7;
+        b = b != "string";
+        b = a != "string";
+        b = a != true;
+        b = f() == g(1);
+        b = f() != g(1);
+        b = f == g;
+        b = f != g;
+        b = p == p;
+        b = p != p;
+        b = P == P;
+        b = P != P;
+        f = g;
+        P = P;
+        p = p;
+    }
     while (true) {
         cout << f;
         cout << f();

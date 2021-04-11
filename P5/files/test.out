@@ -1,0 +1,736 @@
+void q(int a) {
+    return;
+}
+
+bool ff() {
+    return true;
+}
+
+void f() {
+}
+
+void g(bool a) {
+    return;
+}
+
+int h() {
+    return 10;
+}
+
+struct P{
+    int a;
+};
+
+struct L{
+    bool a;
+};
+
+void main() {
+    int x;
+    int y;
+    bool b;
+    bool c;
+    struct P p;
+    struct L l;
+    cout << "string";
+    cout << x(int);
+    cout << b(bool);
+    cout << 7;
+    cout << true;
+    cout << h(->int)();
+    cout << p(P).a(int);
+    cin >> x(int);
+    cin >> b(bool);
+    cin >> p(P).a(int);
+    x(int) = (x(int) + 7);
+    x(int) = (x(int) - 7);
+    x(int) = (x(int) / 7);
+    x(int) = (x(int) * 7);
+    x(int) = (x(int) + y(int));
+    x(int) = (x(int) - y(int));
+    x(int) = (x(int) / y(int));
+    x(int) = (x(int) * y(int));
+    x(int) = (x(int) + h(->int)());
+    x(int) = (x(int) - h(->int)());
+    x(int) = (x(int) / h(->int)());
+    x(int) = (x(int) * h(->int)());
+    x(int) = (x(int) + p(P).a(int));
+    x(int) = (x(int) - p(P).a(int));
+    x(int) = (x(int) / p(P).a(int));
+    x(int) = (x(int) * p(P).a(int));
+    x(int)++;
+    x(int)--;
+    p(P).a(int) = (x(int) + 7);
+    p(P).a(int) = (x(int) - 7);
+    p(P).a(int) = (x(int) / 7);
+    p(P).a(int) = (x(int) * 7);
+    p(P).a(int) = (x(int) + y(int));
+    p(P).a(int) = (x(int) - y(int));
+    p(P).a(int) = (x(int) / y(int));
+    p(P).a(int) = (x(int) * y(int));
+    p(P).a(int) = (x(int) + h(->int)());
+    p(P).a(int) = (x(int) - h(->int)());
+    p(P).a(int) = (x(int) / h(->int)());
+    p(P).a(int) = (x(int) * h(->int)());
+    p(P).a(int) = (x(int) + p(P).a(int));
+    p(P).a(int) = (x(int) - p(P).a(int));
+    p(P).a(int) = (x(int) / p(P).a(int));
+    p(P).a(int) = (x(int) * p(P).a(int));
+    p(P).a(int)++;
+    p(P).a(int)--;
+    x(int)++;
+    x(int)--;
+    b(bool) = (x(int) < 7);
+    b(bool) = (x(int) <= 7);
+    b(bool) = (x(int) > 7);
+    b(bool) = (x(int) >= 7);
+    b(bool) = (x(int) == 7);
+    b(bool) = (x(int) != 7);
+    b(bool) = (x(int) < h(->int)());
+    b(bool) = (x(int) <= h(->int)());
+    b(bool) = (x(int) > h(->int)());
+    b(bool) = (x(int) >= h(->int)());
+    b(bool) = (x(int) == h(->int)());
+    b(bool) = (x(int) != h(->int)());
+    b(bool) = (x(int) < p(P).a(int));
+    b(bool) = (x(int) <= p(P).a(int));
+    b(bool) = (x(int) > p(P).a(int));
+    b(bool) = (x(int) >= p(P).a(int));
+    b(bool) = (x(int) == p(P).a(int));
+    b(bool) = (x(int) != p(P).a(int));
+    b(bool) = (x(int) < y(int));
+    b(bool) = (x(int) <= y(int));
+    b(bool) = (x(int) > y(int));
+    b(bool) = (x(int) >= y(int));
+    b(bool) = (x(int) == y(int));
+    b(bool) = (x(int) != y(int));
+    l(L).a(bool) = (x(int) < 7);
+    l(L).a(bool) = (x(int) <= 7);
+    l(L).a(bool) = (x(int) > 7);
+    l(L).a(bool) = (x(int) >= 7);
+    l(L).a(bool) = (x(int) == 7);
+    l(L).a(bool) = (x(int) != 7);
+    l(L).a(bool) = (x(int) < h(->int)());
+    l(L).a(bool) = (x(int) <= h(->int)());
+    l(L).a(bool) = (x(int) > h(->int)());
+    l(L).a(bool) = (x(int) >= h(->int)());
+    l(L).a(bool) = (x(int) == h(->int)());
+    l(L).a(bool) = (x(int) != h(->int)());
+    l(L).a(bool) = (x(int) < p(P).a(int));
+    l(L).a(bool) = (x(int) <= p(P).a(int));
+    l(L).a(bool) = (x(int) > p(P).a(int));
+    l(L).a(bool) = (x(int) >= p(P).a(int));
+    l(L).a(bool) = (x(int) == p(P).a(int));
+    l(L).a(bool) = (x(int) != p(P).a(int));
+    l(L).a(bool) = (x(int) < y(int));
+    l(L).a(bool) = (x(int) <= y(int));
+    l(L).a(bool) = (x(int) > y(int));
+    l(L).a(bool) = (x(int) >= y(int));
+    l(L).a(bool) = (x(int) == y(int));
+    l(L).a(bool) = (x(int) != y(int));
+    b(bool) = (b(bool) == c(bool));
+    b(bool) = (b(bool) != c(bool));
+    b(bool) = (b(bool) == true);
+    b(bool) = (b(bool) != true);
+    b(bool) = (b(bool) && c(bool));
+    b(bool) = (b(bool) || c(bool));
+    b(bool) = (b(bool) && (!c(bool)));
+    b(bool) = (b(bool) && true);
+    b(bool) = (b(bool) || true);
+    l(L).a(bool) = (b(bool) == c(bool));
+    l(L).a(bool) = (b(bool) != c(bool));
+    l(L).a(bool) = (b(bool) == true);
+    l(L).a(bool) = (b(bool) != true);
+    l(L).a(bool) = (b(bool) && c(bool));
+    l(L).a(bool) = (b(bool) || c(bool));
+    l(L).a(bool) = (b(bool) && (!c(bool)));
+    l(L).a(bool) = (b(bool) && true);
+    l(L).a(bool) = (b(bool) || true);
+    if (true) {
+    }
+    if (b(bool)) {
+    }
+    if (l(L).a(bool)) {
+    }
+    while (true) {
+    }
+    while (b(bool)) {
+    }
+    while (l(L).a(bool)) {
+    }
+    repeat (1) {
+    }
+    repeat (x(int)) {
+    }
+    repeat (p(P).a(int)) {
+    }
+    q(int->void)(1);
+    q(int->void)(x(int));
+    q(int->void)(p(P).a(int));
+    g(bool->void)(true);
+    g(bool->void)(b(bool));
+    g(bool->void)(l(L).a(bool));
+    if (true) {
+        cout << "string";
+        cout << x(int);
+        cout << b(bool);
+        cout << 7;
+        cout << true;
+        cout << h(->int)();
+        cout << p(P).a(int);
+        cin >> x(int);
+        cin >> b(bool);
+        cin >> p(P).a(int);
+        x(int) = (x(int) + 7);
+        x(int) = (x(int) - 7);
+        x(int) = (x(int) / 7);
+        x(int) = (x(int) * 7);
+        x(int) = (x(int) + y(int));
+        x(int) = (x(int) - y(int));
+        x(int) = (x(int) / y(int));
+        x(int) = (x(int) * y(int));
+        x(int) = (x(int) + h(->int)());
+        x(int) = (x(int) - h(->int)());
+        x(int) = (x(int) / h(->int)());
+        x(int) = (x(int) * h(->int)());
+        x(int) = (x(int) + p(P).a(int));
+        x(int) = (x(int) - p(P).a(int));
+        x(int) = (x(int) / p(P).a(int));
+        x(int) = (x(int) * p(P).a(int));
+        x(int)++;
+        x(int)--;
+        p(P).a(int) = (x(int) + 7);
+        p(P).a(int) = (x(int) - 7);
+        p(P).a(int) = (x(int) / 7);
+        p(P).a(int) = (x(int) * 7);
+        p(P).a(int) = (x(int) + y(int));
+        p(P).a(int) = (x(int) - y(int));
+        p(P).a(int) = (x(int) / y(int));
+        p(P).a(int) = (x(int) * y(int));
+        p(P).a(int) = (x(int) + h(->int)());
+        p(P).a(int) = (x(int) - h(->int)());
+        p(P).a(int) = (x(int) / h(->int)());
+        p(P).a(int) = (x(int) * h(->int)());
+        p(P).a(int) = (x(int) + p(P).a(int));
+        p(P).a(int) = (x(int) - p(P).a(int));
+        p(P).a(int) = (x(int) / p(P).a(int));
+        p(P).a(int) = (x(int) * p(P).a(int));
+        p(P).a(int)++;
+        p(P).a(int)--;
+        x(int)++;
+        x(int)--;
+        b(bool) = (x(int) < 7);
+        b(bool) = (x(int) <= 7);
+        b(bool) = (x(int) > 7);
+        b(bool) = (x(int) >= 7);
+        b(bool) = (x(int) == 7);
+        b(bool) = (x(int) != 7);
+        b(bool) = (x(int) < h(->int)());
+        b(bool) = (x(int) <= h(->int)());
+        b(bool) = (x(int) > h(->int)());
+        b(bool) = (x(int) >= h(->int)());
+        b(bool) = (x(int) == h(->int)());
+        b(bool) = (x(int) != h(->int)());
+        b(bool) = (x(int) < p(P).a(int));
+        b(bool) = (x(int) <= p(P).a(int));
+        b(bool) = (x(int) > p(P).a(int));
+        b(bool) = (x(int) >= p(P).a(int));
+        b(bool) = (x(int) == p(P).a(int));
+        b(bool) = (x(int) != p(P).a(int));
+        b(bool) = (x(int) < y(int));
+        b(bool) = (x(int) <= y(int));
+        b(bool) = (x(int) > y(int));
+        b(bool) = (x(int) >= y(int));
+        b(bool) = (x(int) == y(int));
+        b(bool) = (x(int) != y(int));
+        l(L).a(bool) = (x(int) < 7);
+        l(L).a(bool) = (x(int) <= 7);
+        l(L).a(bool) = (x(int) > 7);
+        l(L).a(bool) = (x(int) >= 7);
+        l(L).a(bool) = (x(int) == 7);
+        l(L).a(bool) = (x(int) != 7);
+        l(L).a(bool) = (x(int) < h(->int)());
+        l(L).a(bool) = (x(int) <= h(->int)());
+        l(L).a(bool) = (x(int) > h(->int)());
+        l(L).a(bool) = (x(int) >= h(->int)());
+        l(L).a(bool) = (x(int) == h(->int)());
+        l(L).a(bool) = (x(int) != h(->int)());
+        l(L).a(bool) = (x(int) < p(P).a(int));
+        l(L).a(bool) = (x(int) <= p(P).a(int));
+        l(L).a(bool) = (x(int) > p(P).a(int));
+        l(L).a(bool) = (x(int) >= p(P).a(int));
+        l(L).a(bool) = (x(int) == p(P).a(int));
+        l(L).a(bool) = (x(int) != p(P).a(int));
+        l(L).a(bool) = (x(int) < y(int));
+        l(L).a(bool) = (x(int) <= y(int));
+        l(L).a(bool) = (x(int) > y(int));
+        l(L).a(bool) = (x(int) >= y(int));
+        l(L).a(bool) = (x(int) == y(int));
+        l(L).a(bool) = (x(int) != y(int));
+        b(bool) = (b(bool) == c(bool));
+        b(bool) = (b(bool) != c(bool));
+        b(bool) = (b(bool) == true);
+        b(bool) = (b(bool) != true);
+        b(bool) = (b(bool) && c(bool));
+        b(bool) = (b(bool) || c(bool));
+        b(bool) = (b(bool) && (!c(bool)));
+        b(bool) = (b(bool) && true);
+        b(bool) = (b(bool) || true);
+        l(L).a(bool) = (b(bool) == c(bool));
+        l(L).a(bool) = (b(bool) != c(bool));
+        l(L).a(bool) = (b(bool) == true);
+        l(L).a(bool) = (b(bool) != true);
+        l(L).a(bool) = (b(bool) && c(bool));
+        l(L).a(bool) = (b(bool) || c(bool));
+        l(L).a(bool) = (b(bool) && (!c(bool)));
+        l(L).a(bool) = (b(bool) && true);
+        l(L).a(bool) = (b(bool) || true);
+        if (true) {
+        }
+        if (b(bool)) {
+        }
+        if (l(L).a(bool)) {
+        }
+        while (true) {
+        }
+        while (b(bool)) {
+        }
+        while (l(L).a(bool)) {
+        }
+        repeat (1) {
+        }
+        repeat (x(int)) {
+        }
+        repeat (p(P).a(int)) {
+        }
+        q(int->void)(1);
+        q(int->void)(x(int));
+        q(int->void)(p(P).a(int));
+        g(bool->void)(true);
+        g(bool->void)(b(bool));
+        g(bool->void)(l(L).a(bool));
+    }
+    if (false) {
+    }
+    else {
+        cout << "string";
+        cout << x(int);
+        cout << b(bool);
+        cout << 7;
+        cout << true;
+        cout << h(->int)();
+        cout << p(P).a(int);
+        cin >> x(int);
+        cin >> b(bool);
+        cin >> p(P).a(int);
+        x(int) = (x(int) + 7);
+        x(int) = (x(int) - 7);
+        x(int) = (x(int) / 7);
+        x(int) = (x(int) * 7);
+        x(int) = (x(int) + y(int));
+        x(int) = (x(int) - y(int));
+        x(int) = (x(int) / y(int));
+        x(int) = (x(int) * y(int));
+        x(int) = (x(int) + h(->int)());
+        x(int) = (x(int) - h(->int)());
+        x(int) = (x(int) / h(->int)());
+        x(int) = (x(int) * h(->int)());
+        x(int) = (x(int) + p(P).a(int));
+        x(int) = (x(int) - p(P).a(int));
+        x(int) = (x(int) / p(P).a(int));
+        x(int) = (x(int) * p(P).a(int));
+        x(int)++;
+        x(int)--;
+        p(P).a(int) = (x(int) + 7);
+        p(P).a(int) = (x(int) - 7);
+        p(P).a(int) = (x(int) / 7);
+        p(P).a(int) = (x(int) * 7);
+        p(P).a(int) = (x(int) + y(int));
+        p(P).a(int) = (x(int) - y(int));
+        p(P).a(int) = (x(int) / y(int));
+        p(P).a(int) = (x(int) * y(int));
+        p(P).a(int) = (x(int) + h(->int)());
+        p(P).a(int) = (x(int) - h(->int)());
+        p(P).a(int) = (x(int) / h(->int)());
+        p(P).a(int) = (x(int) * h(->int)());
+        p(P).a(int) = (x(int) + p(P).a(int));
+        p(P).a(int) = (x(int) - p(P).a(int));
+        p(P).a(int) = (x(int) / p(P).a(int));
+        p(P).a(int) = (x(int) * p(P).a(int));
+        p(P).a(int)++;
+        p(P).a(int)--;
+        x(int)++;
+        x(int)--;
+        b(bool) = (x(int) < 7);
+        b(bool) = (x(int) <= 7);
+        b(bool) = (x(int) > 7);
+        b(bool) = (x(int) >= 7);
+        b(bool) = (x(int) == 7);
+        b(bool) = (x(int) != 7);
+        b(bool) = (x(int) < h(->int)());
+        b(bool) = (x(int) <= h(->int)());
+        b(bool) = (x(int) > h(->int)());
+        b(bool) = (x(int) >= h(->int)());
+        b(bool) = (x(int) == h(->int)());
+        b(bool) = (x(int) != h(->int)());
+        b(bool) = (x(int) < p(P).a(int));
+        b(bool) = (x(int) <= p(P).a(int));
+        b(bool) = (x(int) > p(P).a(int));
+        b(bool) = (x(int) >= p(P).a(int));
+        b(bool) = (x(int) == p(P).a(int));
+        b(bool) = (x(int) != p(P).a(int));
+        b(bool) = (x(int) < y(int));
+        b(bool) = (x(int) <= y(int));
+        b(bool) = (x(int) > y(int));
+        b(bool) = (x(int) >= y(int));
+        b(bool) = (x(int) == y(int));
+        b(bool) = (x(int) != y(int));
+        l(L).a(bool) = (x(int) < 7);
+        l(L).a(bool) = (x(int) <= 7);
+        l(L).a(bool) = (x(int) > 7);
+        l(L).a(bool) = (x(int) >= 7);
+        l(L).a(bool) = (x(int) == 7);
+        l(L).a(bool) = (x(int) != 7);
+        l(L).a(bool) = (x(int) < h(->int)());
+        l(L).a(bool) = (x(int) <= h(->int)());
+        l(L).a(bool) = (x(int) > h(->int)());
+        l(L).a(bool) = (x(int) >= h(->int)());
+        l(L).a(bool) = (x(int) == h(->int)());
+        l(L).a(bool) = (x(int) != h(->int)());
+        l(L).a(bool) = (x(int) < p(P).a(int));
+        l(L).a(bool) = (x(int) <= p(P).a(int));
+        l(L).a(bool) = (x(int) > p(P).a(int));
+        l(L).a(bool) = (x(int) >= p(P).a(int));
+        l(L).a(bool) = (x(int) == p(P).a(int));
+        l(L).a(bool) = (x(int) != p(P).a(int));
+        l(L).a(bool) = (x(int) < y(int));
+        l(L).a(bool) = (x(int) <= y(int));
+        l(L).a(bool) = (x(int) > y(int));
+        l(L).a(bool) = (x(int) >= y(int));
+        l(L).a(bool) = (x(int) == y(int));
+        l(L).a(bool) = (x(int) != y(int));
+        b(bool) = (b(bool) == c(bool));
+        b(bool) = (b(bool) != c(bool));
+        b(bool) = (b(bool) == true);
+        b(bool) = (b(bool) != true);
+        b(bool) = (b(bool) && c(bool));
+        b(bool) = (b(bool) || c(bool));
+        b(bool) = (b(bool) && (!c(bool)));
+        b(bool) = (b(bool) && true);
+        b(bool) = (b(bool) || true);
+        l(L).a(bool) = (b(bool) == c(bool));
+        l(L).a(bool) = (b(bool) != c(bool));
+        l(L).a(bool) = (b(bool) == true);
+        l(L).a(bool) = (b(bool) != true);
+        l(L).a(bool) = (b(bool) && c(bool));
+        l(L).a(bool) = (b(bool) || c(bool));
+        l(L).a(bool) = (b(bool) && (!c(bool)));
+        l(L).a(bool) = (b(bool) && true);
+        l(L).a(bool) = (b(bool) || true);
+        if (true) {
+        }
+        if (b(bool)) {
+        }
+        if (l(L).a(bool)) {
+        }
+        while (true) {
+        }
+        while (b(bool)) {
+        }
+        while (l(L).a(bool)) {
+        }
+        repeat (1) {
+        }
+        repeat (x(int)) {
+        }
+        repeat (p(P).a(int)) {
+        }
+        q(int->void)(1);
+        q(int->void)(x(int));
+        q(int->void)(p(P).a(int));
+        g(bool->void)(true);
+        g(bool->void)(b(bool));
+        g(bool->void)(l(L).a(bool));
+    }
+    while (true) {
+        cout << "string";
+        cout << x(int);
+        cout << b(bool);
+        cout << 7;
+        cout << true;
+        cout << h(->int)();
+        cout << p(P).a(int);
+        cin >> x(int);
+        cin >> b(bool);
+        cin >> p(P).a(int);
+        x(int) = (x(int) + 7);
+        x(int) = (x(int) - 7);
+        x(int) = (x(int) / 7);
+        x(int) = (x(int) * 7);
+        x(int) = (x(int) + y(int));
+        x(int) = (x(int) - y(int));
+        x(int) = (x(int) / y(int));
+        x(int) = (x(int) * y(int));
+        x(int) = (x(int) + h(->int)());
+        x(int) = (x(int) - h(->int)());
+        x(int) = (x(int) / h(->int)());
+        x(int) = (x(int) * h(->int)());
+        x(int) = (x(int) + p(P).a(int));
+        x(int) = (x(int) - p(P).a(int));
+        x(int) = (x(int) / p(P).a(int));
+        x(int) = (x(int) * p(P).a(int));
+        x(int)++;
+        x(int)--;
+        p(P).a(int) = (x(int) + 7);
+        p(P).a(int) = (x(int) - 7);
+        p(P).a(int) = (x(int) / 7);
+        p(P).a(int) = (x(int) * 7);
+        p(P).a(int) = (x(int) + y(int));
+        p(P).a(int) = (x(int) - y(int));
+        p(P).a(int) = (x(int) / y(int));
+        p(P).a(int) = (x(int) * y(int));
+        p(P).a(int) = (x(int) + h(->int)());
+        p(P).a(int) = (x(int) - h(->int)());
+        p(P).a(int) = (x(int) / h(->int)());
+        p(P).a(int) = (x(int) * h(->int)());
+        p(P).a(int) = (x(int) + p(P).a(int));
+        p(P).a(int) = (x(int) - p(P).a(int));
+        p(P).a(int) = (x(int) / p(P).a(int));
+        p(P).a(int) = (x(int) * p(P).a(int));
+        p(P).a(int)++;
+        p(P).a(int)--;
+        x(int)++;
+        x(int)--;
+        b(bool) = (x(int) < 7);
+        b(bool) = (x(int) <= 7);
+        b(bool) = (x(int) > 7);
+        b(bool) = (x(int) >= 7);
+        b(bool) = (x(int) == 7);
+        b(bool) = (x(int) != 7);
+        b(bool) = (x(int) < h(->int)());
+        b(bool) = (x(int) <= h(->int)());
+        b(bool) = (x(int) > h(->int)());
+        b(bool) = (x(int) >= h(->int)());
+        b(bool) = (x(int) == h(->int)());
+        b(bool) = (x(int) != h(->int)());
+        b(bool) = (x(int) < p(P).a(int));
+        b(bool) = (x(int) <= p(P).a(int));
+        b(bool) = (x(int) > p(P).a(int));
+        b(bool) = (x(int) >= p(P).a(int));
+        b(bool) = (x(int) == p(P).a(int));
+        b(bool) = (x(int) != p(P).a(int));
+        b(bool) = (x(int) < y(int));
+        b(bool) = (x(int) <= y(int));
+        b(bool) = (x(int) > y(int));
+        b(bool) = (x(int) >= y(int));
+        b(bool) = (x(int) == y(int));
+        b(bool) = (x(int) != y(int));
+        l(L).a(bool) = (x(int) < 7);
+        l(L).a(bool) = (x(int) <= 7);
+        l(L).a(bool) = (x(int) > 7);
+        l(L).a(bool) = (x(int) >= 7);
+        l(L).a(bool) = (x(int) == 7);
+        l(L).a(bool) = (x(int) != 7);
+        l(L).a(bool) = (x(int) < h(->int)());
+        l(L).a(bool) = (x(int) <= h(->int)());
+        l(L).a(bool) = (x(int) > h(->int)());
+        l(L).a(bool) = (x(int) >= h(->int)());
+        l(L).a(bool) = (x(int) == h(->int)());
+        l(L).a(bool) = (x(int) != h(->int)());
+        l(L).a(bool) = (x(int) < p(P).a(int));
+        l(L).a(bool) = (x(int) <= p(P).a(int));
+        l(L).a(bool) = (x(int) > p(P).a(int));
+        l(L).a(bool) = (x(int) >= p(P).a(int));
+        l(L).a(bool) = (x(int) == p(P).a(int));
+        l(L).a(bool) = (x(int) != p(P).a(int));
+        l(L).a(bool) = (x(int) < y(int));
+        l(L).a(bool) = (x(int) <= y(int));
+        l(L).a(bool) = (x(int) > y(int));
+        l(L).a(bool) = (x(int) >= y(int));
+        l(L).a(bool) = (x(int) == y(int));
+        l(L).a(bool) = (x(int) != y(int));
+        b(bool) = (b(bool) == c(bool));
+        b(bool) = (b(bool) != c(bool));
+        b(bool) = (b(bool) == true);
+        b(bool) = (b(bool) != true);
+        b(bool) = (b(bool) && c(bool));
+        b(bool) = (b(bool) || c(bool));
+        b(bool) = (b(bool) && (!c(bool)));
+        b(bool) = (b(bool) && true);
+        b(bool) = (b(bool) || true);
+        l(L).a(bool) = (b(bool) == c(bool));
+        l(L).a(bool) = (b(bool) != c(bool));
+        l(L).a(bool) = (b(bool) == true);
+        l(L).a(bool) = (b(bool) != true);
+        l(L).a(bool) = (b(bool) && c(bool));
+        l(L).a(bool) = (b(bool) || c(bool));
+        l(L).a(bool) = (b(bool) && (!c(bool)));
+        l(L).a(bool) = (b(bool) && true);
+        l(L).a(bool) = (b(bool) || true);
+        if (true) {
+        }
+        if (b(bool)) {
+        }
+        if (l(L).a(bool)) {
+        }
+        while (true) {
+        }
+        while (b(bool)) {
+        }
+        while (l(L).a(bool)) {
+        }
+        repeat (1) {
+        }
+        repeat (x(int)) {
+        }
+        repeat (p(P).a(int)) {
+        }
+        q(int->void)(1);
+        q(int->void)(x(int));
+        q(int->void)(p(P).a(int));
+        g(bool->void)(true);
+        g(bool->void)(b(bool));
+        g(bool->void)(l(L).a(bool));
+    }
+    repeat (1) {
+        cout << "string";
+        cout << x(int);
+        cout << b(bool);
+        cout << 7;
+        cout << true;
+        cout << h(->int)();
+        cout << p(P).a(int);
+        cin >> x(int);
+        cin >> b(bool);
+        cin >> p(P).a(int);
+        x(int) = (x(int) + 7);
+        x(int) = (x(int) - 7);
+        x(int) = (x(int) / 7);
+        x(int) = (x(int) * 7);
+        x(int) = (x(int) + y(int));
+        x(int) = (x(int) - y(int));
+        x(int) = (x(int) / y(int));
+        x(int) = (x(int) * y(int));
+        x(int) = (x(int) + h(->int)());
+        x(int) = (x(int) - h(->int)());
+        x(int) = (x(int) / h(->int)());
+        x(int) = (x(int) * h(->int)());
+        x(int) = (x(int) + p(P).a(int));
+        x(int) = (x(int) - p(P).a(int));
+        x(int) = (x(int) / p(P).a(int));
+        x(int) = (x(int) * p(P).a(int));
+        x(int)++;
+        x(int)--;
+        p(P).a(int) = (x(int) + 7);
+        p(P).a(int) = (x(int) - 7);
+        p(P).a(int) = (x(int) / 7);
+        p(P).a(int) = (x(int) * 7);
+        p(P).a(int) = (x(int) + y(int));
+        p(P).a(int) = (x(int) - y(int));
+        p(P).a(int) = (x(int) / y(int));
+        p(P).a(int) = (x(int) * y(int));
+        p(P).a(int) = (x(int) + h(->int)());
+        p(P).a(int) = (x(int) - h(->int)());
+        p(P).a(int) = (x(int) / h(->int)());
+        p(P).a(int) = (x(int) * h(->int)());
+        p(P).a(int) = (x(int) + p(P).a(int));
+        p(P).a(int) = (x(int) - p(P).a(int));
+        p(P).a(int) = (x(int) / p(P).a(int));
+        p(P).a(int) = (x(int) * p(P).a(int));
+        p(P).a(int)++;
+        p(P).a(int)--;
+        x(int)++;
+        x(int)--;
+        b(bool) = (x(int) < 7);
+        b(bool) = (x(int) <= 7);
+        b(bool) = (x(int) > 7);
+        b(bool) = (x(int) >= 7);
+        b(bool) = (x(int) == 7);
+        b(bool) = (x(int) != 7);
+        b(bool) = (x(int) < h(->int)());
+        b(bool) = (x(int) <= h(->int)());
+        b(bool) = (x(int) > h(->int)());
+        b(bool) = (x(int) >= h(->int)());
+        b(bool) = (x(int) == h(->int)());
+        b(bool) = (x(int) != h(->int)());
+        b(bool) = (x(int) < p(P).a(int));
+        b(bool) = (x(int) <= p(P).a(int));
+        b(bool) = (x(int) > p(P).a(int));
+        b(bool) = (x(int) >= p(P).a(int));
+        b(bool) = (x(int) == p(P).a(int));
+        b(bool) = (x(int) != p(P).a(int));
+        b(bool) = (x(int) < y(int));
+        b(bool) = (x(int) <= y(int));
+        b(bool) = (x(int) > y(int));
+        b(bool) = (x(int) >= y(int));
+        b(bool) = (x(int) == y(int));
+        b(bool) = (x(int) != y(int));
+        l(L).a(bool) = (x(int) < 7);
+        l(L).a(bool) = (x(int) <= 7);
+        l(L).a(bool) = (x(int) > 7);
+        l(L).a(bool) = (x(int) >= 7);
+        l(L).a(bool) = (x(int) == 7);
+        l(L).a(bool) = (x(int) != 7);
+        l(L).a(bool) = (x(int) < h(->int)());
+        l(L).a(bool) = (x(int) <= h(->int)());
+        l(L).a(bool) = (x(int) > h(->int)());
+        l(L).a(bool) = (x(int) >= h(->int)());
+        l(L).a(bool) = (x(int) == h(->int)());
+        l(L).a(bool) = (x(int) != h(->int)());
+        l(L).a(bool) = (x(int) < p(P).a(int));
+        l(L).a(bool) = (x(int) <= p(P).a(int));
+        l(L).a(bool) = (x(int) > p(P).a(int));
+        l(L).a(bool) = (x(int) >= p(P).a(int));
+        l(L).a(bool) = (x(int) == p(P).a(int));
+        l(L).a(bool) = (x(int) != p(P).a(int));
+        l(L).a(bool) = (x(int) < y(int));
+        l(L).a(bool) = (x(int) <= y(int));
+        l(L).a(bool) = (x(int) > y(int));
+        l(L).a(bool) = (x(int) >= y(int));
+        l(L).a(bool) = (x(int) == y(int));
+        l(L).a(bool) = (x(int) != y(int));
+        b(bool) = (b(bool) == c(bool));
+        b(bool) = (b(bool) != c(bool));
+        b(bool) = (b(bool) == true);
+        b(bool) = (b(bool) != true);
+        b(bool) = (b(bool) && c(bool));
+        b(bool) = (b(bool) || c(bool));
+        b(bool) = (b(bool) && (!c(bool)));
+        b(bool) = (b(bool) && true);
+        b(bool) = (b(bool) || true);
+        l(L).a(bool) = (b(bool) == c(bool));
+        l(L).a(bool) = (b(bool) != c(bool));
+        l(L).a(bool) = (b(bool) == true);
+        l(L).a(bool) = (b(bool) != true);
+        l(L).a(bool) = (b(bool) && c(bool));
+        l(L).a(bool) = (b(bool) || c(bool));
+        l(L).a(bool) = (b(bool) && (!c(bool)));
+        l(L).a(bool) = (b(bool) && true);
+        l(L).a(bool) = (b(bool) || true);
+        if (true) {
+        }
+        if (b(bool)) {
+        }
+        if (l(L).a(bool)) {
+        }
+        while (true) {
+        }
+        while (b(bool)) {
+        }
+        while (l(L).a(bool)) {
+        }
+        repeat (1) {
+        }
+        repeat (x(int)) {
+        }
+        repeat (p(P).a(int)) {
+        }
+        q(int->void)(1);
+        q(int->void)(x(int));
+        q(int->void)(p(P).a(int));
+        g(bool->void)(true);
+        g(bool->void)(b(bool));
+        g(bool->void)(l(L).a(bool));
+    }
+}
+
