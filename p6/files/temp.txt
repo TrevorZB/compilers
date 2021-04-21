@@ -1,0 +1,19 @@
+push the return address
+push the control link
+set the FP
+push space for local variables
+
+Here's the code you need to generate:
+  # (1) push return addr
+    sw	 $ra, 0($sp)
+    subu $sp, $sp, 4
+  # (2) push control link
+    sw   $fp, 0($sp)
+    subu $sp, $sp, 4
+  # (3) set the FP
+  # note: the following sets the FP to point to the "bottom"
+  #       of the new AR; the reason for "+ 8" is:
+  #       4 bytes each for the control link and the return addr
+    addu $fp, $sp, <size of params in bytes + 8>
+  # (4) push space for locals
+    subu $sp, $sp, <size of locals in bytes>
