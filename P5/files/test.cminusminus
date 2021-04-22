@@ -3,8 +3,9 @@ bool ff(){return true;}
 void f(){}
 void g(bool a){return;}
 int h(){return 10;}
+void r(int a){}
 struct P{int a;};
-struct L{bool a;};
+struct L{bool a; struct P p;};
 
 void main() {
     int x;
@@ -13,6 +14,9 @@ void main() {
     bool c;
     struct P p;
     struct L l;
+
+    r(l.p.a + "5");
+
     cout << "string";
     cout << x;
     cout << b;

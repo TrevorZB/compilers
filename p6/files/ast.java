@@ -297,7 +297,9 @@ class FnBodyNode extends ASTnode {
         myStmtList = stmtList;
     }
 
-    public void codeGen(SymTable symTab){}
+    public void codeGen(SymTable symTab) {
+        myStmtList.codeGen(symTab);
+    }
 
     /**
      * nameAnalysis
@@ -332,6 +334,12 @@ class FnBodyNode extends ASTnode {
 class StmtListNode extends ASTnode {
     public StmtListNode(List<StmtNode> S) {
         myStmts = S;
+    }
+
+    public void codeGen(SymTable symTab) {
+        for (StmtNode node : myStmts) {
+            node.codeGen(symTab);
+        }
     }
 
     /**
@@ -954,6 +962,7 @@ class StructNode extends TypeNode {
 abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTable symTab);
     abstract public void typeCheck(Type retType);
+    public void codeGen(SymTable symTab){}
 }
 
 class AssignStmtNode extends StmtNode {
@@ -1107,6 +1116,18 @@ class WriteStmtNode extends StmtNode {
         myExp = exp;
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp.codeGen(symTab);
+        if (getPrintType().equals("int") || getPrintType().equals("bool")) {
+            Codegen.genPop(Codegen.A0);
+            Codegen.generate("li", Codegen.V0, 1);
+            Codegen.p.println("\tsyscall");
+        } else if (getPrintType().equals("string")) {
+            Codegen.genPop(Codegen.A0);
+            Codegen.generate("li", Codegen.V0, 4);
+            Codegen.p.println("\tsyscall");
+        }
+    }
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's child
@@ -1120,6 +1141,18 @@ class WriteStmtNode extends StmtNode {
      */
     public void typeCheck(Type retType) {
         Type type = myExp.typeCheck();
+
+        if (type.isStringType()) {
+            this.printType = "string";
+        }
+
+        if (type.isIntType()) {
+            this.printType = "int";
+        }
+
+        if (type.isBoolType()) {
+            this.printType = "bool";
+        }
 
         if (type.isFnType()) {
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(),
@@ -1149,8 +1182,13 @@ class WriteStmtNode extends StmtNode {
         p.println(";");
     }
 
+    public String getPrintType() {
+        return this.printType;
+    }
+
     // 1 kid
     private ExpNode myExp;
+    private String printType;
 }
 
 class IfStmtNode extends StmtNode {
@@ -1519,6 +1557,8 @@ abstract class ExpNode extends ASTnode {
     abstract public Type typeCheck();
     abstract public int lineNum();
     abstract public int charNum();
+
+    public void codeGen(SymTable symTab) {}
 }
 
 class IntLitNode extends ExpNode {
@@ -1526,6 +1566,11 @@ class IntLitNode extends ExpNode {
         myLineNum = lineNum;
         myCharNum = charNum;
         myIntVal = intVal;
+    }
+
+    public void codeGen(SymTable symTab) {
+        Codegen.generate("li", Codegen.T0, myIntVal);
+        Codegen.genPush(Codegen.T0);
     }
 
     /**
@@ -1565,6 +1610,20 @@ class StringLitNode extends ExpNode {
         myStrVal = strVal;
     }
 
+    public void codeGen(SymTable symTab) {
+        // store static data
+        String label = Codegen.nextLabel();
+        Codegen.p.println("\t.data");
+        Codegen.p.println(label + ":\t.asciiz " + myStrVal);
+        Codegen.p.println("\t.text");
+        // end store static data
+
+        // push address to stack
+        Codegen.generateWithComment("la", "load address", Codegen.T0, label);
+        Codegen.genPush(Codegen.T0);
+        // end push address to stack
+    }
+
     /**
      * Return the line number for this literal.
      */
@@ -1601,6 +1660,11 @@ class TrueNode extends ExpNode {
         myCharNum = charNum;
     }
 
+    public void codeGen(SymTable symTab) {
+        Codegen.generate("li", Codegen.T0, 1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     /**
      * Return the line number for this literal.
      */
@@ -1634,6 +1698,11 @@ class FalseNode extends ExpNode {
     public FalseNode(int lineNum, int charNum) {
         myLineNum = lineNum;
         myCharNum = charNum;
+    }
+
+    public void codeGen(SymTable symTab) {
+        Codegen.generate("li", Codegen.T0, 0);
+        Codegen.genPush(Codegen.T0);
     }
 
     /**

@@ -1,4 +1,5 @@
 int a;
-bool b;
 
-int main() {}
+int main(int d) {
+    cout << "hello world";
+}

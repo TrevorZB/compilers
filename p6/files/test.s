@@ -1,9 +1,6 @@
 	.data
 	.align 4
 _a: .space 4
-	.data
-	.align 4
-_b: .space 4
 	.text
 	.globl main
 main:
@@ -11,10 +8,20 @@ main:
 	subu  $sp, $sp, 4
 	sw    $fp, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	addu  $fp, $sp, 8
+	addu  $fp, $sp, 12
 	subu  $sp, $sp, 8
-	lw    $ra, 0($fp)	#load return address
+	.data
+.L0:	.asciiz "hello world"
+	.text
+	la    .L0, load address		#$t0
+	sw    $t0, 0($sp)	#PUSH
+	subu  $sp, $sp, 4
+	lw    $a0, 4($sp)	#POP
+	addu  $sp, $sp, 4
+	li    $v0, 4
+	syscall
+	lw    $ra, -4($fp)	#load return address
 	move  $t0, $fp		#save control link
-	lw    $fp, -4($fp)	#restore FP
+	lw    $fp, -8($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	jr    $ra		#return
