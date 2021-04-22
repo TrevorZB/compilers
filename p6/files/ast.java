@@ -970,6 +970,12 @@ class AssignStmtNode extends StmtNode {
         myAssign = assign;
     }
 
+    public void codeGen(SymTable symTab) {
+        myAssign.codeGen(symTab);
+        // ignore value still stored on stack
+        Codegen.generate("addu", Codegen.SP, Codegen.SP, 4);
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's child
@@ -1741,6 +1747,30 @@ class IdNode extends ExpNode {
         myStrVal = strVal;
     }
 
+    public void codeGen(SymTable symTab) {
+        TSym t = this.sym();
+        if (t.getType().isIntType() || t.getType().isBoolType()) {
+            if (t.getIsGlobal()) {
+                Codegen.generateWithComment("lw", "load global", Codegen.T0, "_" + this.name());
+            } else {
+                Codegen.generateIndexed("lw", Codegen.T0, Codegen.FP, -t.getOffset(), "load local");
+            }
+            Codegen.genPush(Codegen.T0);
+        }
+    }
+
+    public void genAddr(SymTable symTab) {
+        TSym t = this.sym();
+        if (t.getType().isIntType() || t.getType().isBoolType()) {
+            if (t.getIsGlobal()) {
+                Codegen.generateWithComment("la", "load global address", Codegen.T0, "_" + this.name());
+            } else {
+                Codegen.generateIndexed("la", Codegen.T0, Codegen.FP, -t.getOffset(), "load local address");
+            }
+            Codegen.genPush(Codegen.T0);
+        }
+    }
+
     /**
      * Link the given symbol to this ID.
      */
@@ -1982,6 +2012,14 @@ class AssignNode extends ExpNode {
     public AssignNode(ExpNode lhs, ExpNode exp) {
         myLhs = lhs;
         myExp = exp;
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp.codeGen(symTab);
+        ((IdNode)myLhs).genAddr(symTab);
+        Codegen.genPop(Codegen.T0);
+        Codegen.generateIndexed("lw", Codegen.T1, Codegen.SP, 4, "load value");
+        Codegen.generateIndexed("sw", Codegen.T1, Codegen.T0, 0, "store value");
     }
 
     /**
