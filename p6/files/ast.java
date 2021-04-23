@@ -1007,10 +1007,11 @@ class PostIncStmtNode extends StmtNode {
     }
 
     public void codeGen(SymTable symTab) {
+        int offset = ((IdNode)myExp).sym().getOffset();
         myExp.codeGen(symTab);
         Codegen.genPop(Codegen.T0);
         Codegen.generate("addu", Codegen.T0, Codegen.T0, 1);
-        Codegen.genPush(Codegen.T0);
+        Codegen.generateIndexed("sw", Codegen.T0, Codegen.FP, -offset);
     }
 
     /**
@@ -1049,10 +1050,11 @@ class PostDecStmtNode extends StmtNode {
     }
 
     public void codeGen(SymTable symTab) {
+        int offset = ((IdNode)myExp).sym().getOffset();
         myExp.codeGen(symTab);
         Codegen.genPop(Codegen.T0);
         Codegen.generate("subu", Codegen.T0, Codegen.T0, 1);
-        Codegen.genPush(Codegen.T0);
+        Codegen.generateIndexed("sw", Codegen.T0, Codegen.FP, -offset);
     }
 
     /**
