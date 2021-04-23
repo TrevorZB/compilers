@@ -25,7 +25,7 @@ main:
 	subu  $sp, $sp, 4
 	addu  $fp, $sp, 8
 	subu  $sp, $sp, 8
-	li    $t0, 5
+	li    $t0, 7
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	la    $t0, -8($fp)	#load local address
@@ -36,11 +36,14 @@ main:
 	lw    $t1, 4($sp)	#load value
 	sw    $t1, 0($t0)	#store value
 	addu  $sp, $sp, 4
-	jal   _f
-	sw    $v0, 0($sp)	#PUSH
+	li    $v0, 5
+syscall
+	la    $t0, -8($fp)	#load local address
+	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t0, 4($sp)	#POP
 	addu  $sp, $sp, 4
+	sw    $v0, 0($t0)
 	lw    $t0, -8($fp)	#load local
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4

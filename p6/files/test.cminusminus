@@ -5,7 +5,7 @@ void f() {
 
 int main() {
     int a;
-    a = 5;
-    f();
+    a = 7;
+    cin >> a;
     cout << a;
 }

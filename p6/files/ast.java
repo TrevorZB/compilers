@@ -1129,6 +1129,15 @@ class ReadStmtNode extends StmtNode {
         myExp = e;
     }
 
+    public void codeGen(SymTable symTab) {
+        Codegen.generate("li", Codegen.V0, 5);
+        Codegen.p.println("syscall");
+        IdNode i = (IdNode)myExp;
+        i.genAddr(symTab);
+        Codegen.genPop(Codegen.T0);
+        Codegen.generateIndexed("sw", Codegen.V0, Codegen.T0, 0);
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's child
