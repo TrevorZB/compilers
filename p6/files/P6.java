@@ -159,10 +159,6 @@ public class P6 {
 		astRoot.codeGen();
 		Codegen.p.close();
 
-		//////////////////////////
-		// TODO: Calling codeGen   //
-		//////////////////////////
-
 		return P6.RESULT_CORRECT;
 	}
 
