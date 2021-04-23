@@ -1,7 +1,13 @@
+int d;
 
 int main() {
     int a;
-    a = 2;
-    a--;
-    cout << a;
+    a = 10;
+    while (a > 0) {
+        int b;
+        b = a;
+        cout << b;
+        cout << "\n";
+    }
+    cout << "out of while";
 }

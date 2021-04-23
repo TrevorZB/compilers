@@ -203,14 +203,13 @@ class DeclListNode extends ASTnode {
         }
     }
 
-    public void nameAnalysisFn(SymTable symTab, SymTable globalTab, FnSym sym) {
-        int offset = 8 + sym.getNumParams() * 4;
+    public void nameAnalysisFn(SymTable symTab, FnSym sym) {
         for (DeclNode node : myDecls) {
             if (node instanceof VarDeclNode) {
-                TSym tsym = ((VarDeclNode)node).nameAnalysis(symTab, globalTab);
-                tsym.setOffset(offset);
+                TSym tsym = ((VarDeclNode)node).nameAnalysis(symTab, symTab);
+                tsym.setOffset(sym.nextOffset);
                 tsym.setIsGlobal(false);
-                offset += 4;
+                sym.nextOffset += 4;
             } else {
                 node.nameAnalysis(symTab);
             }
@@ -308,10 +307,10 @@ class FnBodyNode extends ASTnode {
      * - process the statement list
      */
     public void nameAnalysis(SymTable symTab, FnSym sym) {
-        sym.setSizeLocals(myDeclList.length()*4);
+        // sym.setSizeLocals(myDeclList.length()*4);
         sym.setSizeParams(sym.getNumParams()*4);
-        myDeclList.nameAnalysisFn(symTab, symTab, sym);
-        myStmtList.nameAnalysis(symTab);
+        myDeclList.nameAnalysisFn(symTab, sym);
+        myStmtList.nameAnalysisFn(symTab, sym);
     }
 
     /**
@@ -348,7 +347,24 @@ class StmtListNode extends ASTnode {
      */
     public void nameAnalysis(SymTable symTab) {
         for (StmtNode node : myStmts) {
-            node.nameAnalysis(symTab);
+            node.nameAnalysis(symTab);   
+        }
+    }
+
+    public void nameAnalysisFn(SymTable symTab, FnSym sym) {
+        for (StmtNode node : myStmts) {
+            if (node instanceof IfStmtNode) {
+                IfStmtNode n = (IfStmtNode)node;
+                n.nameAnalysisFn(symTab, sym);
+            } else if (node instanceof IfElseStmtNode) {
+                IfElseStmtNode n = (IfElseStmtNode)node;
+                n.nameAnalysisFn(symTab, sym);
+            } else if (node instanceof WhileStmtNode) {
+                WhileStmtNode n = (WhileStmtNode)node;
+                n.nameAnalysisFn(symTab, sym);
+            } else {
+                node.nameAnalysis(symTab);
+            }    
         }
     }
 
@@ -658,6 +674,7 @@ class FnDeclNode extends DeclNode {
         else { // add function name to local symbol table
             try {
                 sym = new FnSym(myType.type(), myFormalsList.length());
+                sym.nextOffset = 8 + sym.getNumParams() * 4;
                 symTab.addDecl(name, sym);
                 myId.link(sym);
             } catch (DuplicateSymException ex) {
@@ -1255,6 +1272,20 @@ class IfStmtNode extends StmtNode {
         }
     }
 
+    public void nameAnalysisFn(SymTable symTab, FnSym sym) {
+        myExp.nameAnalysis(symTab);
+        symTab.addScope();
+        myDeclList.nameAnalysisFn(symTab, sym);
+        myStmtList.nameAnalysisFn(symTab, sym);
+        try {
+            symTab.removeScope();
+        } catch (EmptySymTableException ex) {
+            System.err.println("Unexpected EmptySymTableException " +
+                               " in IfStmtNode.nameAnalysis");
+            System.exit(-1);
+        }
+    }
+
      /**
      * typeCheck
      */
@@ -1352,6 +1383,30 @@ class IfElseStmtNode extends StmtNode {
         }
     }
 
+    public void nameAnalysisFn(SymTable symTab, FnSym sym) {
+        myExp.nameAnalysis(symTab);
+        symTab.addScope();
+        myThenDeclList.nameAnalysisFn(symTab, sym);
+        myThenStmtList.nameAnalysisFn(symTab, sym);
+        try {
+            symTab.removeScope();
+        } catch (EmptySymTableException ex) {
+            System.err.println("Unexpected EmptySymTableException " +
+                               " in IfElseStmtNode.nameAnalysis");
+            System.exit(-1);
+        }
+        symTab.addScope();
+        myElseDeclList.nameAnalysisFn(symTab, sym);
+        myElseStmtList.nameAnalysisFn(symTab, sym);
+        try {
+            symTab.removeScope();
+        } catch (EmptySymTableException ex) {
+            System.err.println("Unexpected EmptySymTableException " +
+                               " in IfElseStmtNode.nameAnalysis");
+            System.exit(-1);
+        }
+    }
+
     /**
      * typeCheck
      */
@@ -1430,6 +1485,20 @@ class WhileStmtNode extends StmtNode {
         symTab.addScope();
         myDeclList.nameAnalysis(symTab);
         myStmtList.nameAnalysis(symTab);
+        try {
+            symTab.removeScope();
+        } catch (EmptySymTableException ex) {
+            System.err.println("Unexpected EmptySymTableException " +
+                               " in WhileStmtNode.nameAnalysis");
+            System.exit(-1);
+        }
+    }
+
+    public void nameAnalysisFn(SymTable symTab, FnSym sym) {
+        myExp.nameAnalysis(symTab);
+        symTab.addScope();
+        myDeclList.nameAnalysisFn(symTab, sym);
+        myStmtList.nameAnalysisFn(symTab, sym);
         try {
             symTab.removeScope();
         } catch (EmptySymTableException ex) {

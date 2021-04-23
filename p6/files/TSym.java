@@ -49,6 +49,8 @@ class FnSym extends TSym {
     private int numParams;
     private List<Type> paramTypes;
 
+    public int nextOffset = 0;
+
     private int sizeParams;
     private int sizeLocals;
 
