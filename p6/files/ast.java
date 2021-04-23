@@ -393,6 +393,12 @@ class ExpListNode extends ASTnode {
         myExps = S;
     }
 
+    public void codeGen(SymTable symTab) {
+        for (ExpNode node : myExps) {
+            node.codeGen(symTab);
+        }
+    }
+
     public int size() {
         return myExps.size();
     }
@@ -1605,6 +1611,10 @@ class CallStmtNode extends StmtNode {
         myCall = call;
     }
 
+    public void codeGen(SymTable symTab) {
+        myCall.codeGen(symTab);
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's child
@@ -1885,6 +1895,18 @@ class IdNode extends ExpNode {
         myLineNum = lineNum;
         myCharNum = charNum;
         myStrVal = strVal;
+    }
+
+    public void genJumpAndLink(SymTable symTab) {
+        String name = this.name();
+        String label = "";
+        if (name == "main") {
+            label = "main";
+        } else {
+            label = "_" + name;
+        }
+
+        Codegen.generate("jal", label);
     }
 
     public void codeGen(SymTable symTab) {
@@ -2245,6 +2267,11 @@ class CallExpNode extends ExpNode {
     public CallExpNode(IdNode name) {
         myId = name;
         myExpList = new ExpListNode(new LinkedList<ExpNode>());
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExpList.codeGen(symTab);
+        myId.genJumpAndLink(symTab);
     }
 
     /**

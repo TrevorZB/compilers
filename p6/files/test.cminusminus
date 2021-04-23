@@ -1,13 +1,16 @@
-int d;
+
+void f(int a, int b) {
+    int c;
+    c = 2;
+    cout << a + b + c;
+}
 
 int main() {
     int a;
+    int b;
     a = 10;
-    while (a > 0) {
-        int b;
-        b = a;
-        cout << b;
-        cout << "\n";
-    }
-    cout << "out of while";
+    b = 5;
+    f(a, 9);
+    cout << "\n";
+    cout << a + b;
 }
