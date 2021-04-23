@@ -1,9 +1,6 @@
-int b;
 
-int main(int d) {
-    int a;
-    a = 10;
-    b = 7;
-    cout << a;
+int main() {
+    bool b;
+    b = false || true;
     cout << b;
 }

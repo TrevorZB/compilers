@@ -1006,6 +1006,13 @@ class PostIncStmtNode extends StmtNode {
         myExp = exp;
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+        Codegen.generate("addu", Codegen.T0, Codegen.T0, 1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's child
@@ -1039,6 +1046,13 @@ class PostIncStmtNode extends StmtNode {
 class PostDecStmtNode extends StmtNode {
     public PostDecStmtNode(ExpNode exp) {
         myExp = exp;
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+        Codegen.generate("subu", Codegen.T0, Codegen.T0, 1);
+        Codegen.genPush(Codegen.T0);
     }
 
     /**
@@ -1202,6 +1216,19 @@ class IfStmtNode extends StmtNode {
         myDeclList = dlist;
         myExp = exp;
         myStmtList = slist;
+    }
+
+    public void codeGen(SymTable symTab) {
+        String falseLabel = Codegen.nextLabel();
+        myExp.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.generate("beq", Codegen.T0, "0", falseLabel);
+
+        myDeclList.codeGen(symTab);
+        myStmtList.codeGen(symTab);
+
+        Codegen.p.print(falseLabel + ":");
     }
 
     /**
@@ -1614,6 +1641,10 @@ class StringLitNode extends ExpNode {
         myLineNum = lineNum;
         myCharNum = charNum;
         myStrVal = strVal;
+    }
+
+    public String getStr() {
+        return myStrVal;
     }
 
     public void codeGen(SymTable symTab) {
@@ -2254,6 +2285,15 @@ class UnaryMinusNode extends UnaryExpNode {
         super(exp);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.generateWithComment("neg", "perform negate", Codegen.T0, Codegen.T0);
+        Codegen.genPush(Codegen.T0);
+    }
+
     /**
      * typeCheck
      */
@@ -2284,6 +2324,16 @@ class UnaryMinusNode extends UnaryExpNode {
 class NotNode extends UnaryExpNode {
     public NotNode(ExpNode exp) {
         super(exp);
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T0);
+        Codegen.generate("li", Codegen.T1, 0);
+
+        Codegen.generateWithComment("seq", "perform not", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
     }
 
     /**
@@ -2472,6 +2522,17 @@ class PlusNode extends ArithmeticExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("add", "perform add", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2486,6 +2547,17 @@ class MinusNode extends ArithmeticExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("sub", "perform subtract", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2498,6 +2570,17 @@ class MinusNode extends ArithmeticExpNode {
 class TimesNode extends ArithmeticExpNode {
     public TimesNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("mul", "perform multiplication", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
     }
 
 
@@ -2515,6 +2598,17 @@ class DivideNode extends ArithmeticExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("div", "perform division", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2527,6 +2621,20 @@ class DivideNode extends ArithmeticExpNode {
 class AndNode extends LogicalExpNode {
     public AndNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
+    }
+
+    public void codeGen(SymTable symTab) {
+        String falseLabel = Codegen.nextLabel();
+        myExp1.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.generate("beq", Codegen.T0, "0", falseLabel);
+
+        myExp2.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.p.print(falseLabel + ":");
+        Codegen.genPush(Codegen.T0);
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -2543,6 +2651,20 @@ class OrNode extends LogicalExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        String trueLabel = Codegen.nextLabel();
+        myExp1.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.generate("beq", Codegen.T0, "1", trueLabel);
+
+        myExp2.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.p.print(trueLabel + ":");
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2555,6 +2677,28 @@ class OrNode extends LogicalExpNode {
 class EqualsNode extends EqualityExpNode {
     public EqualsNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        if (myExp1 instanceof StringLitNode) {
+            StringLitNode se1 = (StringLitNode)myExp1;
+            StringLitNode se2 = (StringLitNode)myExp2;
+            int size1 = se1.getStr().length();
+            int size2 = se2.getStr().length();
+            // string lit is an address, not a value
+            Codegen.generateIndexed("ulw", Codegen.T0, Codegen.T0, 0, "load string");
+            Codegen.generateIndexed("ulw", Codegen.T1, Codegen.T1, 0, "load string");
+            Codegen.generateWithComment("seq", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+            Codegen.genPush(Codegen.T0);
+        } else {
+            Codegen.generateWithComment("seq", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+            Codegen.genPush(Codegen.T0);
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -2571,6 +2715,17 @@ class NotEqualsNode extends EqualityExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("sne", "perform inequality", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2583,6 +2738,17 @@ class NotEqualsNode extends EqualityExpNode {
 class LessNode extends RelationalExpNode {
     public LessNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("slt", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -2599,6 +2765,17 @@ class GreaterNode extends RelationalExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("sgt", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2613,6 +2790,17 @@ class LessEqNode extends RelationalExpNode {
         super(exp1, exp2);
     }
 
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("sle", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(");
         myExp1.unparse(p, 0);
@@ -2625,6 +2813,17 @@ class LessEqNode extends RelationalExpNode {
 class GreaterEqNode extends RelationalExpNode {
     public GreaterEqNode(ExpNode exp1, ExpNode exp2) {
         super(exp1, exp2);
+    }
+
+    public void codeGen(SymTable symTab) {
+        myExp1.codeGen(symTab);
+        myExp2.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T1); // right side
+        Codegen.genPop(Codegen.T0); // left side
+
+        Codegen.generateWithComment("sge", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+        Codegen.genPush(Codegen.T0);
     }
 
     public void unparse(PrintWriter p, int indent) {
