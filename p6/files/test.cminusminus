@@ -1,26 +1,5 @@
-
-int f() {
-    return 3;
-}
+int a;
 
 int main() {
-    int a;
-    a = 10;
-    while (a > 0) {
-        cout << a;
-        cout << "\n";
-        a--;
-    }
-    if (a == 0) {
-        if (a == 0) {
-            int b;
-            b = 2;
-            cout << b;
-            cout << "\n";
-        }
-        cout << "in first if";
-        cout << "\n";
-    } else {
-        cout << "dont get here";
-    }
+    cout << "hellaaaa" == "hellbbbb";
 }

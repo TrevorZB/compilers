@@ -1809,6 +1809,7 @@ class StringLitNode extends ExpNode {
         // store static data
         String label = Codegen.nextLabel();
         Codegen.p.println("\t.data");
+        Codegen.p.println("\t.align 4");
         Codegen.p.println(label + ":\t.asciiz " + myStrVal);
         Codegen.p.println("\t.text");
         // end store static data
@@ -2867,8 +2868,8 @@ class EqualsNode extends EqualityExpNode {
             int size1 = se1.getStr().length();
             int size2 = se2.getStr().length();
             // string lit is an address, not a value
-            Codegen.generateIndexed("ulw", Codegen.T0, Codegen.T0, 0, "load string");
-            Codegen.generateIndexed("ulw", Codegen.T1, Codegen.T1, 0, "load string");
+            Codegen.generateIndexed("lw", Codegen.T0, Codegen.T0, 0, "load string");
+            Codegen.generateIndexed("lw", Codegen.T1, Codegen.T1, 0, "load string");
             Codegen.generateWithComment("seq", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
             Codegen.genPush(Codegen.T0);
         } else {
@@ -2894,12 +2895,23 @@ class NotEqualsNode extends EqualityExpNode {
     public void codeGen() {
         myExp1.codeGen();
         myExp2.codeGen();
-
         Codegen.genPop(Codegen.T1); // right side
         Codegen.genPop(Codegen.T0); // left side
 
-        Codegen.generateWithComment("sne", "perform inequality", Codegen.T0, Codegen.T0, Codegen.T1);
-        Codegen.genPush(Codegen.T0);
+        if (myExp1 instanceof StringLitNode) {
+            StringLitNode se1 = (StringLitNode)myExp1;
+            StringLitNode se2 = (StringLitNode)myExp2;
+            int size1 = se1.getStr().length();
+            int size2 = se2.getStr().length();
+            // string lit is an address, not a value
+            Codegen.generateIndexed("lw", Codegen.T0, Codegen.T0, 0, "load string");
+            Codegen.generateIndexed("lw", Codegen.T1, Codegen.T1, 0, "load string");
+            Codegen.generateWithComment("sne", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+            Codegen.genPush(Codegen.T0);
+        } else {
+            Codegen.generateWithComment("sne", "perform equality", Codegen.T0, Codegen.T0, Codegen.T1);
+            Codegen.genPush(Codegen.T0);
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
