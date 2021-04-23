@@ -1,16 +1,11 @@
 
-void f(int a, int b) {
-    int c;
-    c = 2;
-    cout << a + b + c;
+void f() {
+    return;
 }
 
 int main() {
     int a;
-    int b;
-    a = 10;
-    b = 5;
-    f(a, 9);
-    cout << "\n";
-    cout << a + b;
+    a = 5;
+    f();
+    cout << a;
 }

@@ -296,8 +296,8 @@ class FnBodyNode extends ASTnode {
         myStmtList = stmtList;
     }
 
-    public void codeGen(SymTable symTab) {
-        myStmtList.codeGen(symTab);
+    public void codeGen(SymTable symTab, FnSym sym) {
+        myStmtList.codeGen(symTab, sym);
     }
 
     /**
@@ -335,9 +335,23 @@ class StmtListNode extends ASTnode {
         myStmts = S;
     }
 
-    public void codeGen(SymTable symTab) {
+    public void codeGen(SymTable symTab, FnSym sym) {
         for (StmtNode node : myStmts) {
-            node.codeGen(symTab);
+            if (node instanceof ReturnStmtNode) {
+                ReturnStmtNode n = (ReturnStmtNode)node;
+                n.codeGen(symTab, sym);
+            } else if (node instanceof IfStmtNode) {
+                IfStmtNode n = (IfStmtNode)node;
+                n.codeGen(symTab, sym);
+            } else if (node instanceof IfElseStmtNode) {
+                IfElseStmtNode n = (IfElseStmtNode)node;
+                n.codeGen(symTab, sym);
+            } else if (node instanceof WhileStmtNode) {
+                WhileStmtNode n = (WhileStmtNode)node;
+                n.codeGen(symTab, sym);
+            } else {
+                node.codeGen(symTab);
+            }
         }
     }
 
@@ -631,7 +645,7 @@ class FnDeclNode extends DeclNode {
         // end entry
 
         // body
-        myBody.codeGen(symTab);
+        myBody.codeGen(symTab, f);
         // end body
 
         // exit
@@ -1243,7 +1257,7 @@ class IfStmtNode extends StmtNode {
         myStmtList = slist;
     }
 
-    public void codeGen(SymTable symTab) {
+    public void codeGen(SymTable symTab, FnSym sym) {
         String falseLabel = Codegen.nextLabel();
         myExp.codeGen(symTab);
         Codegen.genPop(Codegen.T0);
@@ -1251,7 +1265,7 @@ class IfStmtNode extends StmtNode {
         Codegen.generate("beq", Codegen.T0, "0", falseLabel);
 
         myDeclList.codeGen(symTab);
-        myStmtList.codeGen(symTab);
+        myStmtList.codeGen(symTab, sym);
 
         Codegen.p.print(falseLabel + ":");
     }
@@ -1334,7 +1348,7 @@ class IfElseStmtNode extends StmtNode {
         myElseStmtList = slist2;
     }
 
-    public void codeGen(SymTable symTab) {
+    public void codeGen(SymTable symTab, FnSym sym) {
         String elseLabel = Codegen.nextLabel();
         String endLabel = Codegen.nextLabel();
 
@@ -1344,12 +1358,12 @@ class IfElseStmtNode extends StmtNode {
         Codegen.generate("beq", Codegen.T0, "0", elseLabel);
 
         myThenDeclList.codeGen(symTab);
-        myThenStmtList.codeGen(symTab);
+        myThenStmtList.codeGen(symTab, sym);
         Codegen.generate("j", endLabel);
 
         Codegen.p.print(elseLabel + ":");
         myElseDeclList.codeGen(symTab);
-        myElseStmtList.codeGen(symTab);
+        myElseStmtList.codeGen(symTab, sym);
 
         Codegen.p.print(endLabel + ":");
     }
@@ -1460,7 +1474,7 @@ class WhileStmtNode extends StmtNode {
         myStmtList = slist;
     }
 
-    public void codeGen(SymTable symTab) {
+    public void codeGen(SymTable symTab, FnSym sym) {
         String loopLabel = Codegen.nextLabel();
         String falseLabel = Codegen.nextLabel();
 
@@ -1471,7 +1485,7 @@ class WhileStmtNode extends StmtNode {
         Codegen.generate("beq", Codegen.T0, "0", falseLabel);
 
         myDeclList.codeGen(symTab);
-        myStmtList.codeGen(symTab);
+        myStmtList.codeGen(symTab, sym);
 
         Codegen.generate("j", loopLabel);
 
@@ -1613,6 +1627,7 @@ class CallStmtNode extends StmtNode {
 
     public void codeGen(SymTable symTab) {
         myCall.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
     }
 
     /**
@@ -1643,6 +1658,21 @@ class CallStmtNode extends StmtNode {
 class ReturnStmtNode extends StmtNode {
     public ReturnStmtNode(ExpNode exp) {
         myExp = exp;
+    }
+
+    public void codeGen(SymTable symTab, FnSym sym) {
+        if (myExp != null) {
+            myExp.codeGen(symTab);
+            Codegen.genPop(Codegen.V0);
+        }
+
+        // exit
+        Codegen.generateIndexed("lw", Codegen.RA, Codegen.FP, -sym.getSizeParams(), "load return address");
+        Codegen.generateWithComment("move", "save control link", Codegen.T0, Codegen.FP);
+        Codegen.generateIndexed("lw", Codegen.FP, Codegen.FP, -(sym.getSizeParams() + 4), "restore FP");
+        Codegen.generateWithComment("move", "restore SP", Codegen.SP, Codegen.T0);
+        Codegen.generateWithComment("jr", "return", Codegen.RA);
+        // end exit
     }
 
     /**
@@ -2272,6 +2302,7 @@ class CallExpNode extends ExpNode {
     public void codeGen(SymTable symTab) {
         myExpList.codeGen(symTab);
         myId.genJumpAndLink(symTab);
+        Codegen.genPush(Codegen.V0);
     }
 
     /**
