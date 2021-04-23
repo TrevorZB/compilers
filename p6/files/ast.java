@@ -1295,6 +1295,26 @@ class IfElseStmtNode extends StmtNode {
         myElseStmtList = slist2;
     }
 
+    public void codeGen(SymTable symTab) {
+        String elseLabel = Codegen.nextLabel();
+        String endLabel = Codegen.nextLabel();
+
+        myExp.codeGen(symTab);
+        Codegen.genPop(Codegen.T0);
+
+        Codegen.generate("beq", Codegen.T0, "0", elseLabel);
+
+        myThenDeclList.codeGen(symTab);
+        myThenStmtList.codeGen(symTab);
+        Codegen.generate("j", endLabel);
+
+        Codegen.p.print(elseLabel + ":");
+        myElseDeclList.codeGen(symTab);
+        myElseStmtList.codeGen(symTab);
+
+        Codegen.p.print(endLabel + ":");
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, do:
@@ -1375,6 +1395,24 @@ class WhileStmtNode extends StmtNode {
         myExp = exp;
         myDeclList = dlist;
         myStmtList = slist;
+    }
+
+    public void codeGen(SymTable symTab) {
+        String loopLabel = Codegen.nextLabel();
+        String falseLabel = Codegen.nextLabel();
+
+        Codegen.p.print(loopLabel + ":");
+        myExp.codeGen(symTab);
+
+        Codegen.genPop(Codegen.T0);
+        Codegen.generate("beq", Codegen.T0, "0", falseLabel);
+
+        myDeclList.codeGen(symTab);
+        myStmtList.codeGen(symTab);
+
+        Codegen.generate("j", loopLabel);
+
+        Codegen.p.print(falseLabel + ":");
     }
 
     /**

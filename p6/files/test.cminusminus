@@ -1,6 +1,12 @@
 
 int main() {
     bool b;
-    b = false || true;
-    cout << b;
+    b = true;
+
+    if (b) {
+        cout << "in if\n";
+    } else {
+        cout << "in else\n";
+    }
+    cout << "both print this";
 }
